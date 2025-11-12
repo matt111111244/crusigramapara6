@@ -1,0 +1,25 @@
+{
+  "name": "crucigrama-html5",
+  "version": "1.0.0",
+  "description": "A crossword puzzle project focused on artistic concepts.",
+  "main": "src/index.html",
+  "scripts": {
+    "start": "live-server src",
+    "build": "echo 'Build step not defined'",
+    "test": "echo 'Test step not defined'"
+  },
+  "keywords": [
+    "crossword",
+    "html5",
+    "art",
+    "puntillismo",
+    "perspectiva",
+    "sombreado"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}
