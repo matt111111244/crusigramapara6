@@ -1,22 +1,449 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crucigrama - Puntillismo</title>
-    <link rel="stylesheet" href="styles/main.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Crucigrama — Arte (Navidad)</title>
+<style>
+  :root{--bg1:#071029;--bg2:#072040;--accent:#60a5fa;--ok:#5eead4;--bad:#ff6b6b}
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#f1f7fb;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
+  .wrap{width:980px;max-width:98%;text-align:center;position:relative;z-index:2}
+  h1{margin:6px 0 12px;text-align:center;font-size:22px}
+  /* guirnalda decorativa */
+  .garland{height:56px;background:linear-gradient(90deg,#0b3b2e,#11473a);border-radius:10px;padding:8px 14px;display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;box-shadow:0 6px 20px rgba(2,8,20,0.6)}
+  .light{width:12px;height:12px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.6)}
+  .l1{background:#ffcb4a}
+  .l2{background:#ff6b6b}
+  .l3{background:#60a5fa}
+  .l4{background:#7ee787}
+  .garland span{transform-origin:center;animation:blink 2s infinite}
+  .garland span:nth-child(2){animation-delay:.3s}.garland span:nth-child(3){animation-delay:.6s}.garland span:nth-child(4){animation-delay:.9s}
+  @keyframes blink{0%,60%{filter:brightness(.6)}70%{filter:brightness(1.4)}100%{filter:brightness(.8)}}
+
+  .layout{display:flex;gap:18px;align-items:flex-start;justify-content:center}
+  .left{width:640px;background:linear-gradient(180deg,#052035,#083044);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);display:flex;flex-direction:column;align-items:center}
+  .right{width:300px;background:linear-gradient(180deg,#071426,#041826);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04)}
+  .grid{display:grid;grid-template-columns:repeat(15,34px);gap:4px;justify-content:center;user-select:none}
+  .cell{width:34px;height:34px;background:rgba(255,255,255,0.03);border-radius:6px;display:grid;place-items:center;position:relative}
+  .cell.empty{background:transparent}
+  input.letter{width:100%;height:100%;border:0;background:transparent;color:#e6eef8;font-weight:800;font-size:16px;text-transform:uppercase;text-align:center;outline:none}
+  input.letter:focus{box-shadow:inset 0 0 0 2px rgba(96,165,250,0.12);border-radius:6px}
+  input.initial{background:linear-gradient(90deg,#ffd166,#f97316);color:#041124;font-weight:900;cursor:default}
+  .clues h3{margin:6px 0 8px;font-size:14px;text-align:left}
+  .clues ol{padding-left:18px;margin:6px 0 12px;text-align:left}
+  .clues li{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-direction:column;align-items:flex-start}
+  .clueHeader{display:flex;justify-content:space-between;width:100%;align-items:center}
+  .clueStatus{min-width:28px;text-align:right;font-weight:800}
+  .btn{display:inline-block;padding:8px 12px;background:linear-gradient(90deg,#06b6d4,#2563eb);color:#041124;border-radius:8px;font-weight:700;cursor:pointer;border:none}
+  .small{font-size:13px;color:#9fd7ff88;margin-top:8px;display:block}
+  .result{margin-top:10px;padding:8px;border-radius:8px;background:#061424;color:#bfe9ff;text-align:left}
+  .hint{font-size:13px;color:#9fd7ff88;margin-top:6px}
+  .reveal{margin-left:8px;background:#ffb4b4;color:#041124}
+  .score{font-weight:900;color:var(--accent)}
+  .moreHints{margin-top:6px;font-size:13px;color:#dff7e8;background:rgba(255,255,255,0.03);padding:8px;border-radius:6px;display:none}
+  .toggleHints{background:transparent;border:0;color:#9fd7ff88;cursor:pointer;font-size:13px;text-decoration:underline;padding:0}
+  .hintList{margin:6px 0 0;padding-left:12px}
+  footer{margin-top:12px;font-size:12px;color:#9fd7ff66;text-align:center}
+
+  /* snow layer (behind content) */
+  .snowLayer{position:fixed;inset:0;pointer-events:none;z-index:1}
+  .snowflake{position:absolute;color:#fff;top:-10vh;font-size:12px;opacity:.9;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));animation:fall linear infinite}
+  @keyframes fall{
+    to{transform:translateY(120vh) rotate(360deg)}
+  }
+  /* responsive tweak */
+  @media (max-width:920px){ .layout{flex-direction:column} .left,.right{width:100%} .grid{transform:scale(.88);transform-origin:center top} }
+</style>
 </head>
 <body>
-    <h1>Crucigrama sobre Puntillismo</h1>
-    <div id="crossword-container">
-        <!-- Crossword grid will be rendered here -->
+  <!-- snow layer will be injected by JS -->
+  <div class="snowLayer" id="snowLayer" aria-hidden="true"></div>
+
+  <div class="wrap" role="main">
+    <div class="garland" aria-hidden="true">
+      <strong style="color:#dff7e8">Crucigrama — Navidad</strong>
+      <div style="flex:1"></div>
+      <div class="garland">
+        <span class="light l1"></span>
+        <span class="light l2"></span>
+        <span class="light l3"></span>
+        <span class="light l4"></span>
+      </div>
     </div>
-    <div id="clues-container">
-        <h2>Clues</h2>
-        <ul id="clues-list">
-            <!-- Clues will be populated here -->
-        </ul>
+
+    <h1>Crucigrama — Términos de arte (con pistas ampliadas)</h1>
+    <div class="layout">
+      <div class="left">
+        <div style="text-align:center;margin-bottom:8px">
+          <button id="checkBtn" class="btn">Comprobar</button>
+          <button id="revealBtn" class="btn reveal">Mostrar respuestas</button>
+        </div>
+
+        <div class="grid" id="grid" aria-label="Crucigrama"></div>
+
+        <div class="hint">Haz clic en una casilla y escribe la letra. Usa Backspace para borrar. Letras en mayúscula. Algunas iniciales están prellenadas. Si necesitas más ayuda abre "Más pistas" en cada definición.</div>
+      </div>
+
+      <div class="right" aria-live="polite">
+        <div class="clues">
+          <h3>Definiciones (cada entrada tiene pistas adicionales)</h3>
+          <strong>Horizontal</strong>
+          <ol id="acrossList"></ol>
+
+          <strong>Vertical</strong>
+          <ol id="downList"></ol>
+        </div>
+
+        <div class="result" id="result" style="display:none"></div>
+
+        <div style="margin-top:10px">
+          <button id="resetBtn" class="btn" style="background:linear-gradient(90deg,#ffd166,#f97316)">Reiniciar</button>
+        </div>
+      </div>
     </div>
-    <script src="scripts/main.js"></script>
+
+    <footer>Palabras: PUNTILLISMO, PERSPECTIVA, HORIZONTE, PUNTO, ARTISTICA, SOMBRADO, COLOR</footer>
+  </div>
+
+<script>
+// Config y datos
+const ROWS = 13, COLS = 15;
+const PREFILL_IDS = [1,2,3,4,5,6,7];
+const gridEl = document.getElementById('grid');
+const acrossList = document.getElementById('acrossList');
+const downList = document.getElementById('downList');
+const resultEl = document.getElementById('result');
+const checkBtn = document.getElementById('checkBtn');
+const revealBtn = document.getElementById('revealBtn');
+const resetBtn = document.getElementById('resetBtn');
+
+// WORDS ahora incluye un array 'hints' con varias pistas por palabra
+const WORDS = [
+  {id:1, word:'PERSPECTIVA', clue:'Técnica que muestra profundidad y relaciones espaciales',
+    dir:'across', r:1, c:1,
+    hints:[
+      '1) Se usa para crear sensación de distancia.',
+      '2) Incluye elementos como punto de fuga y líneas convergentes.',
+      '3) Nombre de la ley visual que cambia el tamaño aparente según la distancia.',
+      '4) Palabra de 11 letras.'
+    ]
+  },
+  {id:2, word:'PUNTILLISMO', clue:'Estilo pictórico que utiliza puntos de color',
+    dir:'down', r:1, c:4,
+    hints:[
+      '1) Técnica asociada a Seurat y Signac.',
+      '2) Se compone de miles de pequeños puntos y manchas.',
+      '3) Nombre que contiene la palabra "punto" en su raíz.',
+      '4) Palabra larga de 11 letras.'
+    ]
+  },
+  {id:3, word:'HORIZONTE', clue:'Línea que separa cielo y tierra',
+    dir:'across', r:5, c:2,
+    hints:[
+      '1) Donde el cielo y la tierra parecen encontrarse.',
+      '2) Punto de referencia para la perspectiva en paisajes.',
+      '3) Tiene 8 letras.',
+      '4) Empieza por H.'
+    ]
+  },
+  {id:4, word:'PUNTO', clue:'Marca pequeña; también punto de fuga',
+    dir:'across', r:8, c:3,
+    hints:[
+      '1) Pequeña señal o marca.',
+      '2) También se usa en dibujo para indicar origen de líneas de fuga.',
+      '3) Solo 4 letras.',
+      '4) Rima con "junto" (en español coloquial).'
+    ]
+  },
+  {id:5, word:'ARTISTICA', clue:'Relacionado con el arte (sin tilde)',
+    dir:'down', r:2, c:10,
+    hints:[
+      '1) Algo con cualidades propias del arte.',
+      '2) Forma femenina/adjetiva de "artístico" pero sin tilde según el archivo.',
+      '3) 9 letras.',
+      '4) Contiene la raíz "ART".'
+    ]
+  },
+  {id:6, word:'SOMBRADO', clue:'Técnica para crear volumen mediante sombras',
+    dir:'across', r:10, c:1,
+    hints:[
+      '1) Acción de aplicar sombra.',
+      '2) Aporta volumen y profundidad en dibujo.',
+      '3) 7 letras.',
+      '4) Empieza por S.'
+    ]
+  },
+  {id:7, word:'COLOR', clue:'Atributo que percibimos por la luz',
+    dir:'across', r:12, c:6,
+    hints:[
+      '1) Rojo, azul y amarillo son ejemplos.',
+      '2) Relacionado con la saturación y el tono.',
+      '3) 5 letras.',
+      '4) Muy usado por pintores para transmitir emoción.'
+    ]
+  }
+];
+
+// construir matriz
+const matrix = Array.from({length:ROWS}, ()=> Array.from({length:COLS}, ()=> ({ch:'', fixed:false, wordIds:[]})));
+WORDS.forEach(w=>{
+  const s = w.word.toUpperCase();
+  for(let i=0;i<s.length;i++){
+    const r = w.dir === 'across' ? w.r : w.r + i;
+    const c = w.dir === 'across' ? w.c + i : w.c;
+    if(r<0||r>=ROWS||c<0||c>=COLS) continue;
+    matrix[r][c].ch = matrix[r][c].ch || s[i];
+    matrix[r][c].wordIds.push(w.id);
+    matrix[r][c].fixed = true;
+  }
+});
+
+// UI: generar casillas y prefill iniciales
+const inputs = [];
+for(let r=0;r<ROWS;r++){
+  for(let c=0;c<COLS;c++){
+    const cell = document.createElement('div');
+    const cellData = matrix[r][c];
+    cell.className = cellData.fixed ? 'cell' : 'cell empty';
+    if(cellData.fixed){
+      const inp = document.createElement('input');
+      inp.className = 'letter';
+      inp.maxLength = 1;
+      inp.dataset.r = r; inp.dataset.c = c;
+      inp.autocomplete = 'off';
+      inp.dataset.ans = cellData.ch;
+
+      const isStartPrefill = WORDS.some(w=>{
+        if(!PREFILL_IDS.includes(w.id)) return false;
+        if(w.dir === 'across') return (w.r === r && w.c === c);
+        return (w.dir === 'down' && w.r === r && w.c === c);
+      });
+
+      if(isStartPrefill){
+        inp.value = cellData.ch || '';
+        inp.disabled = true;
+        inp.classList.add('initial');
+      } else {
+        inp.value = '';
+        inp.addEventListener('input', e=>{
+          e.target.value = e.target.value.toUpperCase().replace(/[^A-ZÑÁÉÍÓÚÜ]/g,'');
+          const rr = parseInt(e.target.dataset.r,10), cc = parseInt(e.target.dataset.c,10);
+          const next = findNextCell(rr,cc);
+          if(next) next.focus();
+        });
+        inp.addEventListener('keydown', e=>{
+          if(e.key === 'Backspace' && !e.target.value){
+            const prev = findPrevCell(parseInt(e.target.dataset.r,10),parseInt(e.target.dataset.c,10));
+            if(prev) { prev.focus(); prev.value=''; e.preventDefault(); }
+          }
+        });
+      }
+
+      cell.appendChild(inp);
+      inputs.push(inp);
+    }
+    gridEl.appendChild(cell);
+  }
+}
+
+// navegación
+function findNextCell(r,c){
+  for(let cc=c+1;cc<COLS;cc++){
+    const el = inputs.find(i=>parseInt(i.dataset.r)==r && parseInt(i.dataset.c)==cc && !i.disabled);
+    if(el) return el;
+  }
+  for(let rr=r+1; rr<ROWS; rr++){
+    for(let cc=0; cc<COLS; cc++){
+      const el = inputs.find(i=>parseInt(i.dataset.r)==rr && parseInt(i.dataset.c)==cc && !i.disabled);
+      if(el) return el;
+    }
+  }
+  return null;
+}
+function findPrevCell(r,c){
+  for(let cc=c-1;cc>=0;cc--){
+    const el = inputs.find(i=>parseInt(i.dataset.r)==r && parseInt(i.dataset.c)==cc && !i.disabled);
+    if(el) return el;
+  }
+  for(let rr=r-1; rr>=0; rr--){
+    for(let cc=COLS-1; cc>=0; cc--){
+      const el = inputs.find(i=>parseInt(i.dataset.r)==rr && parseInt(i.dataset.c)==cc && !i.disabled);
+      if(el) return el;
+    }
+  }
+  return null;
+}
+
+// pistas con espacio para estado + render hints toggle
+function renderClues(){
+  acrossList.innerHTML=''; downList.innerHTML='';
+  WORDS.filter(w=>w.dir==='across').forEach(w=>{
+    const li = document.createElement('li');
+    const header = document.createElement('div');
+    header.className = 'clueHeader';
+    header.innerHTML = `<span><strong>${w.word.length} letras</strong> — ${w.clue}</span><span class="clueStatus" data-id="${w.id}"></span>`;
+    const toggle = document.createElement('button');
+    toggle.className = 'toggleHints';
+    toggle.textContent = 'Más pistas';
+    toggle.addEventListener('click', ()=> {
+      more.style.display = more.style.display === 'none' ? 'block' : 'none';
+      toggle.textContent = more.style.display === 'none' ? 'Más pistas' : 'Ocultar pistas';
+    });
+    header.appendChild(toggle);
+
+    const more = document.createElement('div');
+    more.className = 'moreHints';
+    more.innerHTML = `<div class="hintList">${w.hints.map(h=>`<div>• ${h}</div>`).join('')}</div>`;
+    more.style.display = 'none';
+
+    li.appendChild(header);
+    li.appendChild(more);
+    acrossList.appendChild(li);
+  });
+  WORDS.filter(w=>w.dir==='down').forEach(w=>{
+    const li = document.createElement('li');
+    const header = document.createElement('div');
+    header.className = 'clueHeader';
+    header.innerHTML = `<span><strong>${w.word.length} letras</strong> — ${w.clue}</span><span class="clueStatus" data-id="${w.id}"></span>`;
+    const toggle = document.createElement('button');
+    toggle.className = 'toggleHints';
+    toggle.textContent = 'Más pistas';
+    toggle.addEventListener('click', ()=> {
+      more.style.display = more.style.display === 'none' ? 'block' : 'none';
+      toggle.textContent = more.style.display === 'none' ? 'Más pistas' : 'Ocultar pistas';
+    });
+    header.appendChild(toggle);
+
+    const more = document.createElement('div');
+    more.className = 'moreHints';
+    more.innerHTML = `<div class="hintList">${w.hints.map(h=>`<div>• ${h}</div>`).join('')}</div>`;
+    more.style.display = 'none';
+
+    li.appendChild(header);
+    li.appendChild(more);
+    downList.appendChild(li);
+  });
+}
+renderClues();
+
+// comprobar y marcar pistas
+function checkAll(){
+  let correct = 0, total = 0;
+  inputs.forEach(inp=>{
+    const ans = (inp.dataset.ans || '').toUpperCase();
+    const val = (inp.value || '').toUpperCase();
+    if(ans){
+      total++;
+      if(val === ans){
+        inp.style.background = 'linear-gradient(90deg,#5eead4,#60f0d6)';
+        inp.style.color = '#041124';
+        correct++;
+      } else {
+        inp.style.background = 'linear-gradient(90deg,#ffb4b4,#ff6b6b)';
+        inp.style.color = '#111';
+      }
+    }
+  });
+
+  const wordResults = WORDS.map(w=>{
+    const letters = [];
+    for(let i=0;i<w.word.length;i++){
+      const r = w.dir==='across' ? w.r : w.r + i;
+      const c = w.dir==='across' ? w.c + i : w.c;
+      const inp = inputs.find(x=>parseInt(x.dataset.r)==r && parseInt(x.dataset.c)==c);
+      const ok = inp && (inp.value||'').toUpperCase() === (inp.dataset.ans||'').toUpperCase();
+      letters.push(ok);
+    }
+    return {id:w.id, word:w.word, ok: letters.every(Boolean), clue:w.clue};
+  });
+
+  // actualizar indicadores junto a pistas
+  document.querySelectorAll('.clueStatus').forEach(span=>{
+    const id = parseInt(span.dataset.id,10);
+    const wr = wordResults.find(w=>w.id===id);
+    span.textContent = wr ? (wr.ok ? '✅' : '❌') : '';
+  });
+
+  const correctWords = wordResults.filter(w=>w.ok).length;
+  const msg = `Letras correctas: ${correct} / ${total}. Palabras completas correctas: ${correctWords} / ${WORDS.length}.`;
+  resultEl.style.display = 'block';
+  resultEl.innerHTML = `<div>${msg}</div><div style="margin-top:6px">Lista de palabras y definiciones:</div>${wordResults.map(w=>`<div style="margin-top:6px"><strong>${w.word}</strong> — ${w.clue} ${w.ok ? '✅' : '❌'}</div>`).join('')}`;
+  const nota = Math.round((correctWords/WORDS.length)*10*10)/10;
+  resultEl.innerHTML += `<div style="margin-top:8px">Nota: <span class="score">${nota}/10</span></div>`;
+}
+
+// revelar y reiniciar con contraseña
+function revealAll(){
+  inputs.forEach(inp=>{
+    inp.value = inp.dataset.ans || '';
+    inp.style.background = 'linear-gradient(90deg,#ffd166,#f97316)';
+    inp.style.color = '#041124';
+  });
+  checkAll();
+}
+function resetAll(){
+  inputs.forEach(inp=>{
+    if(inp.disabled){ }
+    else { inp.value = ''; inp.style.background = ''; inp.style.color = ''; }
+  });
+  resultEl.style.display = 'none';
+  // limpiar estados junto a pistas
+  document.querySelectorAll('.clueStatus').forEach(s=> s.textContent = '');
+}
+
+checkBtn.addEventListener('click', checkAll);
+resetBtn.addEventListener('click', resetAll);
+
+// Mostrar respuestas sólo si la contraseña es correcta
+revealBtn.addEventListener('click', ()=>{
+  // pedir contraseña mediante prompt
+  const pw = prompt('Introduce la contraseña para mostrar las respuestas:');
+  // Si usuario cancela prompt, no hacer nada
+  if(pw === null) return;
+  if(pw === 'mateo9080'){
+    revealAll();
+    // pequeña confirmación visual
+    resultEl.style.display = 'block';
+    resultEl.innerHTML = `<div>Contraseña correcta. Respuestas reveladas.</div>`;
+  } else {
+    // contraseña incorrecta: mostrar mensaje de error y no revelar
+    resultEl.style.display = 'block';
+    resultEl.innerHTML = `<div style="color:var(--bad);font-weight:800">Contraseña incorrecta. No se mostrarán las respuestas.</div>`;
+    // opcional: pequeño destello rojo en el botón
+    revealBtn.animate([
+      { transform: 'translateX(0)' },
+      { transform: 'translateX(-6px)' },
+      { transform: 'translateX(6px)' },
+      { transform: 'translateX(0)' }
+    ], { duration: 300, easing: 'ease' });
+  }
+});
+
+// focus first editable input
+setTimeout(()=>{ const f = inputs.find(i=>!i.disabled); if(f) f.focus(); },300);
+
+/* --------- Snow generation (pure CSS animation, JS creates flakes) --------- */
+(function createSnow(){
+  const layer = document.getElementById('snowLayer');
+  const COUNT = 36;
+  for(let i=0;i<COUNT;i++){
+    const s = document.createElement('span');
+    s.className = 'snowflake';
+    // random positions and sizes
+    const left = Math.random()*100;
+    const size = 8 + Math.random()*14;
+    const delay = Math.random()*-20;
+    const duration = 8 + Math.random()*18;
+    s.style.left = left + 'vw';
+    s.style.fontSize = size + 'px';
+    s.style.opacity = (0.6 + Math.random()*0.6).toFixed(2);
+    s.style.animationDuration = duration + 's';
+    s.style.animationDelay = delay + 's';
+    s.innerHTML = '❆';
+    layer.appendChild(s);
+  }
+})();
+</script>
 </body>
 </html>
