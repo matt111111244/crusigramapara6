@@ -63,7 +63,7 @@
     font-weight:800;
     font-size:16px;
     letter-spacing:0.6px;
-    background:linear-gradient(90deg,#ff6b6b,#facc15,#60a5fa,#7ee787,#ff6b6b);
+    background:linear-gradient(90deg,#ff6b66,#facc15,#60a5fa,#7ee787,#ff6b6b);
     background-size:300% 300%;
     -webkit-background-clip:text;
     background-clip:text;
@@ -149,7 +149,7 @@
   
   .letter{width:100%;height:100%;text-align:center;border:none;background:transparent;color:var(--ok);font-weight:bold;font-size:14px;text-transform:uppercase;padding:0;cursor:text;transition:background .12s,color .12s}
   .letter:focus{outline:none;background:rgba(250,204,21,0.2);color:var(--accent);box-shadow:0 0 8px rgba(250,204,21,0.4)}
-  .letter.initial{background:rgba(255,255,255,0.08);cursor:default;color:#aaa}
+  .letter.initial{background:
   .letter.correct{background:rgba(94,234,212,0.15);color:var(--ok)}
   .letter.wrong{background:rgba(255,107,107,0.15);color:var(--bad)}
   
@@ -212,8 +212,8 @@
     <footer>Palabras: PINCELADA, PUNTILLISMO, PUNTO, ARTISTICA, SOMBRADO, COLOR, LIENZO</footer>
   </div>
   
-  <audio id="music" loop>
-    <source src="https://assets.codepen.io/3685267/Christmas_Song.mp3" type="audio/mpeg">
+  <audio id="music" loop volume="0.8" crossorigin="anonymous">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
   </audio>
 
   <script>
@@ -518,10 +518,30 @@
     resultEl.classList.remove('show', 'error');
   });
 
-  // Música
+  // Música - reproducir automáticamente o al hacer click
+  let musicStarted = false;
+
+  function startMusic() {
+    if (!musicStarted) {
+      music.play().catch(err => {
+        console.log('Error al reproducir música:', err);
+      });
+      musicStarted = true;
+      musicBtn.textContent = '⏸️ Música';
+    }
+  }
+
+  // Intentar reproducir al cargar
+  window.addEventListener('load', () => {
+    startMusic();
+  });
+
+  // Si falla el autoplay, reproducir al primer click en la página
+  document.addEventListener('click', startMusic, { once: true });
+
   musicBtn.addEventListener('click', () => {
-    if(music.paused) {
-      music.play();
+    if (music.paused) {
+      music.play().catch(err => console.log('Error:', err));
       musicBtn.textContent = '⏸️ Música';
     } else {
       music.pause();
