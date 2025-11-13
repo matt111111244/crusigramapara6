@@ -5,445 +5,538 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Crucigrama — Arte (Navidad)</title>
 <style>
-  :root{--bg1:#071029;--bg2:#072040;--accent:#60a5fa;--ok:#5eead4;--bad:#ff6b6b}
+  :root{--bg1:#5b0f0f;--bg2:#083820;--accent:#facc15;--ok:#5eead4;--bad:#ff6b6b}
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,var(--bg1),var(--bg2));color:#f1f7fb;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}
-  .wrap{width:980px;max-width:98%;text-align:center;position:relative;z-index:2}
-  h1{margin:6px 0 12px;text-align:center;font-size:22px}
-  /* guirnalda decorativa */
+  html,body{
+    height:100%;
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0; /* quitar padding global para centrar exactamente */
+    background:linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:#f1f7fb;
+    overflow:auto;
+  }
+
+  .wrap{
+    width:980px;
+    max-width:98%;
+    text-align:center;
+    position:relative;
+    z-index:2;
+    margin:auto;         /* asegura centrado si hay scroll */
+    padding:22px;        /* mover padding desde body a wrap */
+    border-radius:14px;
+    background:linear-gradient(180deg, rgba(2,18,23,0.6), rgba(3,32,36,0.45));
+    box-shadow:0 12px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    border:2px solid rgba(250,204,21,0.08);
+  }
+
+  h1{margin:6px 0 12px;text-align:center;font-size:22px;color:var(--accent);text-shadow:0 2px 8px rgba(0,0,0,0.6)}
+  
   .garland{height:56px;background:linear-gradient(90deg,#0b3b2e,#11473a);border-radius:10px;padding:8px 14px;display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;box-shadow:0 6px 20px rgba(2,8,20,0.6)}
   .light{width:12px;height:12px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.6)}
-  .l1{background:#ffcb4a}
-  .l2{background:#ff6b6b}
+  .l1{background:#ffd166}
+  .l2{background:#fb7185}
   .l3{background:#60a5fa}
   .l4{background:#7ee787}
   .garland span{transform-origin:center;animation:blink 2s infinite}
-  .garland span:nth-child(2){animation-delay:.3s}.garland span:nth-child(3){animation-delay:.6s}.garland span:nth-child(4){animation-delay:.9s}
+  .garland span:nth-child(2){animation-delay:.3s}
+  .garland span:nth-child(3){animation-delay:.6s}
+  .garland span:nth-child(4){animation-delay:.9s}
   @keyframes blink{0%,60%{filter:brightness(.6)}70%{filter:brightness(1.4)}100%{filter:brightness(.8)}}
 
-  .layout{display:flex;gap:18px;align-items:flex-start;justify-content:center}
-  .left{width:640px;background:linear-gradient(180deg,#052035,#083044);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);display:flex;flex-direction:column;align-items:center}
-  .right{width:300px;background:linear-gradient(180deg,#071426,#041826);padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04)}
-  .grid{display:grid;grid-template-columns:repeat(15,34px);gap:4px;justify-content:center;user-select:none}
-  .cell{width:34px;height:34px;background:rgba(255,255,255,0.03);border-radius:6px;display:grid;place-items:center;position:relative}
-  .cell.empty{background:transparent}
-  input.letter{width:100%;height:100%;border:0;background:transparent;color:#e6eef8;font-weight:800;font-size:16px;text-transform:uppercase;text-align:center;outline:none}
-  input.letter:focus{box-shadow:inset 0 0 0 2px rgba(96,165,250,0.12);border-radius:6px}
-  input.initial{background:linear-gradient(90deg,#ffd166,#f97316);color:#041124;font-weight:900;cursor:default}
-  .clues h3{margin:6px 0 8px;font-size:14px;text-align:left}
-  .clues ol{padding-left:18px;margin:6px 0 12px;text-align:left}
-  .clues li{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-direction:column;align-items:flex-start}
-  .clueHeader{display:flex;justify-content:space-between;width:100%;align-items:center}
-  .clueStatus{min-width:28px;text-align:right;font-weight:800}
-  .btn{display:inline-block;padding:8px 12px;background:linear-gradient(90deg,#06b6d4,#2563eb);color:#041124;border-radius:8px;font-weight:700;cursor:pointer;border:none}
-  .small{font-size:13px;color:#9fd7ff88;margin-top:8px;display:block}
-  .result{margin-top:10px;padding:8px;border-radius:8px;background:#061424;color:#bfe9ff;text-align:left}
-  .hint{font-size:13px;color:#9fd7ff88;margin-top:6px}
-  .reveal{margin-left:8px;background:#ffb4b4;color:#041124}
-  .score{font-weight:900;color:var(--accent)}
-  .moreHints{margin-top:6px;font-size:13px;color:#dff7e8;background:rgba(255,255,255,0.03);padding:8px;border-radius:6px;display:none}
-  .toggleHints{background:transparent;border:0;color:#9fd7ff88;cursor:pointer;font-size:13px;text-decoration:underline;padding:0}
-  .hintList{margin:6px 0 0;padding-left:12px}
-  footer{margin-top:12px;font-size:12px;color:#9fd7ff66;text-align:center}
-
-  /* snow layer (behind content) */
-  .snowLayer{position:fixed;inset:0;pointer-events:none;z-index:1}
-  .snowflake{position:absolute;color:#fff;top:-10vh;font-size:12px;opacity:.9;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));animation:fall linear infinite}
-  @keyframes fall{
-    to{transform:translateY(120vh) rotate(360deg)}
+  /* --- Estilo navideño adicional --- */
+  .wrap{
+    background:linear-gradient(180deg, rgba(2,18,23,0.6), rgba(3,32,36,0.45));
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 12px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+    border:2px solid rgba(250,204,21,0.08);
   }
-  /* responsive tweak */
-  @media (max-width:920px){ .layout{flex-direction:column} .left,.right{width:100%} .grid{transform:scale(.88);transform-origin:center top} }
+
+  /* Texto del creador con cambio de colores */
+  .creator{
+    margin:8px 0 12px;
+    font-weight:800;
+    font-size:16px;
+    letter-spacing:0.6px;
+    background:linear-gradient(90deg,#ff6b6b,#facc15,#60a5fa,#7ee787,#ff6b6b);
+    background-size:300% 300%;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:colorShift 6s linear infinite;
+    text-shadow:0 2px 6px rgba(0,0,0,0.45);
+  }
+  @keyframes colorShift{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  /* Copos de nieve (estilo y animación) */
+  .snowflake{
+    position:fixed;
+    top:-10vh;
+    z-index:1;
+    pointer-events:none;
+    user-select:none;
+    color:rgba(255,255,255,0.95);
+    text-shadow:0 0 8px rgba(255,255,255,0.9);
+    font-size:18px;
+    animation-name:fall, drift;
+    animation-timing-function:linear, ease-in-out;
+    animation-iteration-count:infinite, infinite;
+  }
+  @keyframes fall{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg);opacity:1}
+    100%{transform:translateY(110vh) translateX(40px) rotate(360deg);opacity:0.6}
+  }
+  @keyframes drift{
+    0%{transform:translateX(0)}
+    50%{transform:translateX(30px)}
+    100%{transform:translateX(0)}
+  }
+
+  /* Mantener resto de estilos originales */
+  .layout{
+    display:flex;
+    gap:18px;
+    align-items:flex-start;
+    justify-content:center;
+    flex-wrap:nowrap; /* evitar que las pistas bajen encima del grid */
+  }
+  .left{
+    flex: 1 1 640px;
+    min-width: 520px;
+    background:linear-gradient(180deg,#072226,#083032);
+    padding:14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.04);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .right{
+    flex: 0 0 320px;
+    width:320px;
+    min-width:260px;
+    background:linear-gradient(180deg,#0a2a20,#04211a);
+    padding:14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.04);
+    max-height:70vh;
+    overflow-y:auto;
+    position:sticky;
+    top:36px; /* mantiene las pistas visibles al hacer scroll */
+    align-self:flex-start;
+  }
+
+  /* Responsive: en móviles apilar pistas debajo del crucigrama */
+  @media (max-width:980px){
+    .layout{flex-direction:column;flex-wrap:wrap;align-items:center}
+    .left{min-width:0;width:100%}
+    .right{position:static;width:100%;flex:none;max-height:none}
+  }
+  
+  .grid{display:grid;grid-template-columns:repeat(15,34px);gap:4px;justify-content:center;user-select:none}
+  .cell{width:34px;height:34px;background:rgba(255,255,255,0.03);border-radius:6px;display:grid;place-items:center;position:relative;transition:transform .12s,box-shadow .12s;border:1px solid rgba(255,255,255,0.1)}
+  .cell.empty{background:transparent;border:none}
+  .cell.fixed{background:rgba(0,0,0,0.4)}
+  
+  .letter{width:100%;height:100%;text-align:center;border:none;background:transparent;color:var(--ok);font-weight:bold;font-size:14px;text-transform:uppercase;padding:0;cursor:text;transition:background .12s,color .12s}
+  .letter:focus{outline:none;background:rgba(250,204,21,0.2);color:var(--accent);box-shadow:0 0 8px rgba(250,204,21,0.4)}
+  .letter.initial{background:rgba(255,255,255,0.08);cursor:default;color:#aaa}
+  .letter.correct{background:rgba(94,234,212,0.15);color:var(--ok)}
+  .letter.wrong{background:rgba(255,107,107,0.15);color:var(--bad)}
+  
+  .controls{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}
+  button{padding:8px 16px;background:linear-gradient(135deg,#1e40af,#0369a1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#f1f7fb;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s}
+  button:hover{background:linear-gradient(135deg,#1e3a8a,#075985);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
+  button:active{transform:scale(0.96)}
+  
+  h2{font-size:16px;color:var(--accent);margin:12px 0 8px;text-align:left}
+  .clues{font-size:13px;line-height:1.8}
+  .clue{text-align:left;margin-bottom:10px;padding:8px;background:rgba(255,255,255,0.02);border-radius:4px;border-left:3px solid var(--accent);transition:all .2s}
+  .clue strong{color:var(--accent)}
+  .clue-hint{font-size:12px;color:rgba(241,247,251,0.7);margin-top:2px;font-style:italic}
+  .clue.solved{opacity:0.6;text-decoration:line-through;border-left-color:var(--ok)}
+  
+  #result{margin-top:12px;padding:14px;border-radius:6px;font-weight:bold;display:none;text-align:center;background:rgba(94,234,212,0.15);border:1px solid var(--ok)}
+  #result.show{display:block}
+  #result.error{background:rgba(255,107,107,0.15);border-color:var(--bad);color:var(--bad)}
+  #grade{font-size:24px;margin-top:8px;color:var(--accent)}
+  
+  footer{margin-top:20px;font-size:12px;color:rgba(241,247,251,0.6)}
 </style>
 </head>
 <body>
-  <!-- snow layer will be injected by JS -->
-  <div class="snowLayer" id="snowLayer" aria-hidden="true"></div>
+  <div class="wrap">
+    <h1>🎨 Crucigrama — Arte 🎄</h1>
 
-  <div class="wrap" role="main">
-    <div class="garland" aria-hidden="true">
-      <strong style="color:#dff7e8">Crucigrama — Navidad</strong>
-      <div style="flex:1"></div>
-      <div class="garland">
-        <span class="light l1"></span>
-        <span class="light l2"></span>
-        <span class="light l3"></span>
-        <span class="light l4"></span>
-      </div>
+    <!-- Creado por -->
+    <div class="creator">Creado por: Mateo</div>
+    
+    <div class="garland">
+      <span class="light l1"></span>
+      <span class="light l2"></span>
+      <span class="light l3"></span>
+      <span class="light l4"></span>
     </div>
-
-    <h1>Crucigrama — Términos de arte (con pistas ampliadas)</h1>
+    
+    <div class="controls">
+      <button id="musicBtn">🎶 Música</button>
+      <button id="checkBtn">✓ Comprobar</button>
+      <button id="revealBtn">👁️ Revelar</button>
+      <button id="resetBtn">↺ Reiniciar</button>
+    </div>
+    
     <div class="layout">
       <div class="left">
-        <div style="text-align:center;margin-bottom:8px">
-          <button id="checkBtn" class="btn">Comprobar</button>
-          <button id="revealBtn" class="btn reveal">Mostrar respuestas</button>
-        </div>
-
-        <div class="grid" id="grid" aria-label="Crucigrama"></div>
-
-        <div class="hint">Haz clic en una casilla y escribe la letra. Usa Backspace para borrar. Letras en mayúscula. Algunas iniciales están prellenadas. Si necesitas más ayuda abre "Más pistas" en cada definición.</div>
+        <div id="grid" class="grid"></div>
+        <div id="result"></div>
       </div>
-
-      <div class="right" aria-live="polite">
-        <div class="clues">
-          <h3>Definiciones (cada entrada tiene pistas adicionales)</h3>
-          <strong>Horizontal</strong>
-          <ol id="acrossList"></ol>
-
-          <strong>Vertical</strong>
-          <ol id="downList"></ol>
-        </div>
-
-        <div class="result" id="result" style="display:none"></div>
-
-        <div style="margin-top:10px">
-          <button id="resetBtn" class="btn" style="background:linear-gradient(90deg,#ffd166,#f97316)">Reiniciar</button>
-        </div>
+      
+      <div class="right">
+        <h2>📋 Horizontales</h2>
+        <div id="acrossList" class="clues"></div>
+        
+        <h2>📋 Verticales</h2>
+        <div id="downList" class="clues"></div>
       </div>
     </div>
-
-    <footer>Palabras: PUNTILLISMO, PERSPECTIVA, HORIZONTE, PUNTO, ARTISTICA, SOMBRADO, COLOR</footer>
+    
+    <footer>Palabras: PINCELADA, PUNTILLISMO, PUNTO, ARTISTICA, SOMBRADO, COLOR, LIENZO</footer>
   </div>
+  
+  <audio id="music" loop>
+    <source src="https://assets.codepen.io/3685267/Christmas_Song.mp3" type="audio/mpeg">
+  </audio>
 
-<script>
-// Config y datos
-const ROWS = 13, COLS = 15;
-const PREFILL_IDS = [1,2,3,4,5,6,7];
-const gridEl = document.getElementById('grid');
-const acrossList = document.getElementById('acrossList');
-const downList = document.getElementById('downList');
-const resultEl = document.getElementById('result');
-const checkBtn = document.getElementById('checkBtn');
-const revealBtn = document.getElementById('revealBtn');
-const resetBtn = document.getElementById('resetBtn');
+  <script>
+  const ROWS = 13, COLS = 15;
+  const gridEl = document.getElementById('grid');
+  const acrossList = document.getElementById('acrossList');
+  const downList = document.getElementById('downList');
+  const resultEl = document.getElementById('result');
+  const checkBtn = document.getElementById('checkBtn');
+  const revealBtn = document.getElementById('revealBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const musicBtn = document.getElementById('musicBtn');
+  const music = document.getElementById('music');
 
-// WORDS ahora incluye un array 'hints' con varias pistas por palabra
-const WORDS = [
-  {id:1, word:'PERSPECTIVA', clue:'Técnica que muestra profundidad y relaciones espaciales',
-    dir:'across', r:1, c:1,
-    hints:[
-      '1) Se usa para crear sensación de distancia.',
-      '2) Incluye elementos como punto de fuga y líneas convergentes.',
-      '3) Nombre de la ley visual que cambia el tamaño aparente según la distancia.',
-      '4) Palabra de 11 letras.'
-    ]
-  },
-  {id:2, word:'PUNTILLISMO', clue:'Estilo pictórico que utiliza puntos de color',
-    dir:'down', r:1, c:4,
-    hints:[
-      '1) Técnica asociada a Seurat y Signac.',
-      '2) Se compone de miles de pequeños puntos y manchas.',
-      '3) Nombre que contiene la palabra "punto" en su raíz.',
-      '4) Palabra larga de 11 letras.'
-    ]
-  },
-  {id:3, word:'HORIZONTE', clue:'Línea que separa cielo y tierra',
-    dir:'across', r:5, c:2,
-    hints:[
-      '1) Donde el cielo y la tierra parecen encontrarse.',
-      '2) Punto de referencia para la perspectiva en paisajes.',
-      '3) Tiene 8 letras.',
-      '4) Empieza por H.'
-    ]
-  },
-  {id:4, word:'PUNTO', clue:'Marca pequeña; también punto de fuga',
-    dir:'across', r:8, c:3,
-    hints:[
-      '1) Pequeña señal o marca.',
-      '2) También se usa en dibujo para indicar origen de líneas de fuga.',
-      '3) Solo 4 letras.',
-      '4) Rima con "junto" (en español coloquial).'
-    ]
-  },
-  {id:5, word:'ARTISTICA', clue:'Relacionado con el arte (sin tilde)',
-    dir:'down', r:2, c:10,
-    hints:[
-      '1) Algo con cualidades propias del arte.',
-      '2) Forma femenina/adjetiva de "artístico" pero sin tilde según el archivo.',
-      '3) 9 letras.',
-      '4) Contiene la raíz "ART".'
-    ]
-  },
-  {id:6, word:'SOMBRADO', clue:'Técnica para crear volumen mediante sombras',
-    dir:'across', r:10, c:1,
-    hints:[
-      '1) Acción de aplicar sombra.',
-      '2) Aporta volumen y profundidad en dibujo.',
-      '3) 7 letras.',
-      '4) Empieza por S.'
-    ]
-  },
-  {id:7, word:'COLOR', clue:'Atributo que percibimos por la luz',
-    dir:'across', r:12, c:6,
-    hints:[
-      '1) Rojo, azul y amarillo son ejemplos.',
-      '2) Relacionado con la saturación y el tono.',
-      '3) 5 letras.',
-      '4) Muy usado por pintores para transmitir emoción.'
-    ]
+  // Crear nieve dinámica
+  function createSnowflakes(count = 40){
+    const chars = ['❄','❅','❆','✻'];
+    for(let i=0;i<count;i++){
+      const el = document.createElement('div');
+      el.className = 'snowflake';
+      el.textContent = chars[Math.floor(Math.random()*chars.length)];
+      const left = Math.random()*100;
+      const size = 10 + Math.random()*18;
+      const duration = 7 + Math.random()*8;
+      const delay = Math.random()*5;
+      el.style.left = left + 'vw';
+      el.style.fontSize = size + 'px';
+      el.style.animationDuration = `${duration}s, ${3+Math.random()*4}s`;
+      el.style.animationDelay = `${delay}s, ${delay}s`;
+      document.body.appendChild(el);
+      // eliminar después de mucho tiempo para no acumular si se recrea
+      setTimeout(()=> el.remove(), (duration+delay+2)*1000);
+    }
+    // recrear periódicamente
+    setTimeout(()=> createSnowflakes(12), 3500);
   }
-];
+  createSnowflakes();
 
-// construir matriz
-const matrix = Array.from({length:ROWS}, ()=> Array.from({length:COLS}, ()=> ({ch:'', fixed:false, wordIds:[]})));
-WORDS.forEach(w=>{
-  const s = w.word.toUpperCase();
-  for(let i=0;i<s.length;i++){
-    const r = w.dir === 'across' ? w.r : w.r + i;
-    const c = w.dir === 'across' ? w.c + i : w.c;
-    if(r<0||r>=ROWS||c<0||c>=COLS) continue;
-    matrix[r][c].ch = matrix[r][c].ch || s[i];
-    matrix[r][c].wordIds.push(w.id);
-    matrix[r][c].fixed = true;
-  }
-});
+  const WORDS = [
+    {id:1, word:'PINCELADA', clue:'🎨 Trazo de pincel en una obra de arte', hints:['Empieza con P', 'Tiene 9 letras', 'Acción del artista'], dir:'across', r:1, c:1},
+    {id:2, word:'PUNTILLISMO', clue:'🟢 Estilo pictórico que utiliza puntos de color', hints:['Empieza con P', 'Tiene 11 letras', 'Técnica francesa del siglo XIX'], dir:'down', r:1, c:1},
+    {id:3, word:'PUNTO', clue:'⚪ Marca pequeña; base del arte', hints:['Empieza con P', 'Tiene 5 letras', 'Elemento fundamental'], dir:'across', r:5, c:3},
+    {id:4, word:'ARTISTICA', clue:'🖌️ Relativo al arte', hints:['Empieza con A', 'Tiene 9 letras', 'Adjetivo que describe obras'], dir:'down', r:2, c:10},
+    {id:5, word:'SOMBRADO', clue:'🖍️ Técnica para crear volumen mediante sombras', hints:['Empieza con S', 'Tiene 8 letras', 'Usa lápiz o carbón'], dir:'across', r:8, c:1},
+    {id:6, word:'COLOR', clue:'🌈 Atributo que percibimos por la luz', hints:['Empieza con C', 'Tiene 5 letras', 'Fundamental en pintura'], dir:'across', r:11, c:6},
+    {id:7, word:'LIENZO', clue:'🖼️ Tela sobre la que pinta el artista', hints:['Empieza con L', 'Tiene 6 letras', 'Material de pintura'], dir:'down', r:5, c:9}
+  ];
 
-// UI: generar casillas y prefill iniciales
-const inputs = [];
-for(let r=0;r<ROWS;r++){
-  for(let c=0;c<COLS;c++){
-    const cell = document.createElement('div');
-    const cellData = matrix[r][c];
-    cell.className = cellData.fixed ? 'cell' : 'cell empty';
-    if(cellData.fixed){
-      const inp = document.createElement('input');
-      inp.className = 'letter';
-      inp.maxLength = 1;
-      inp.dataset.r = r; inp.dataset.c = c;
-      inp.autocomplete = 'off';
-      inp.dataset.ans = cellData.ch;
+  // Construir matriz
+  const matrix = Array.from({length:ROWS}, ()=> 
+    Array.from({length:COLS}, ()=> ({ch:'', fixed:false, wordIds:[]}))
+  );
 
-      const isStartPrefill = WORDS.some(w=>{
-        if(!PREFILL_IDS.includes(w.id)) return false;
-        if(w.dir === 'across') return (w.r === r && w.c === c);
-        return (w.dir === 'down' && w.r === r && w.c === c);
-      });
+  WORDS.forEach(w => {
+    for(let i=0; i<w.word.length; i++){
+      const r = w.dir === 'across' ? w.r : w.r + i;
+      const c = w.dir === 'across' ? w.c + i : w.c;
+      matrix[r][c] = {ch: w.word[i], fixed: true, wordIds: [...(matrix[r][c].wordIds || []), w.id]};
+    }
+  });
 
-      if(isStartPrefill){
-        inp.value = cellData.ch || '';
-        inp.disabled = true;
-        inp.classList.add('initial');
-      } else {
-        inp.value = '';
-        inp.addEventListener('input', e=>{
+  // Generar grid
+  const inputs = [];
+  const PREFILL_IDS = []; // Sin palabras prefilladas inicialmente
+  
+  for(let r=0; r<ROWS; r++){
+    for(let c=0; c<COLS; c++){
+      const cell = document.createElement('div');
+      const cellData = matrix[r][c];
+      cell.className = cellData.fixed ? 'cell fixed' : 'cell empty';
+      
+      if(cellData.fixed){
+        const inp = document.createElement('input');
+        inp.className = 'letter';
+        inp.maxLength = 1;
+        inp.dataset.r = r;
+        inp.dataset.c = c;
+        inp.dataset.ans = cellData.ch;
+        inp.autocomplete = 'off';
+        
+        // Mostrar inicial (primera letra de cada palabra)
+        const isStart = WORDS.some(w => {
+          if(w.dir === 'across') return (w.r === r && w.c === c);
+          return (w.dir === 'down' && w.r === r && w.c === c);
+        });
+        
+        if(isStart){
+          inp.value = cellData.ch;
+          inp.disabled = true;
+          inp.classList.add('initial');
+        } else {
+          inp.value = '';
+        }
+        
+        inp.addEventListener('input', e => {
           e.target.value = e.target.value.toUpperCase().replace(/[^A-ZÑÁÉÍÓÚÜ]/g,'');
-          const rr = parseInt(e.target.dataset.r,10), cc = parseInt(e.target.dataset.c,10);
-          const next = findNextCell(rr,cc);
+          const next = findNextCell(r, c);
           if(next) next.focus();
         });
-        inp.addEventListener('keydown', e=>{
+        
+        inp.addEventListener('keydown', e => {
           if(e.key === 'Backspace' && !e.target.value){
-            const prev = findPrevCell(parseInt(e.target.dataset.r,10),parseInt(e.target.dataset.c,10));
-            if(prev) { prev.focus(); prev.value=''; e.preventDefault(); }
+            const prev = findPrevCell(r, c);
+            if(prev) {prev.focus(); prev.value = ''; e.preventDefault();}
           }
         });
+        
+        inp.addEventListener('paste', e => {
+          e.preventDefault();
+          const text = (e.clipboardData || window.clipboardData).getData('text') || '';
+          const letters = text.toUpperCase().replace(/[^A-ZÑÁÉÍÓÚÜ]/g,'').split('');
+          if(!letters.length) return;
+
+          const rr = parseInt(inp.dataset.r,10);
+          const cc = parseInt(inp.dataset.c,10);
+
+          // ids de palabras que pasan por esta casilla
+          const ids = (matrix[rr] && matrix[rr][cc] && matrix[rr][cc].wordIds) ? matrix[rr][cc].wordIds : [];
+          if(!ids.length) return;
+
+          // elegir la palabra que mejor acomoda el pegado (más casillas editables desde la posición)
+          let best = null;
+          for(const id of ids){
+            const w = WORDS.find(x=>x.id===id);
+            if(!w) continue;
+            const pos = w.dir === 'across' ? (cc - w.c) : (rr - w.r);
+            if(pos < 0 || pos >= w.word.length) continue;
+            // contar casillas disponibles (no disabled) desde pos hasta final de la palabra
+            let available = 0;
+            for(let i=pos;i<w.word.length;i++){
+              const r = w.dir === 'across' ? w.r : w.r + i;
+              const c = w.dir === 'across' ? w.c + i : w.c;
+              const target = inputs.find(x => x.dataset.r == r && x.dataset.c == c);
+              if(target && !target.disabled) available++;
+            }
+            const candidate = {word:w, pos, available};
+            if(!best) { best = candidate; continue; }
+            // preferir candidato que puede alojar todas las letras; si ambos pueden, elegir el que tenga más disponible
+            if(candidate.available >= letters.length && best.available < letters.length) best = candidate;
+            else if(candidate.available >= letters.length && best.available >= letters.length){
+              // si ambos caben, preferir down sobre across para pegados verticales (heurística), o el que tenga más espacio
+              if(candidate.available > best.available) best = candidate;
+              else if(candidate.available === best.available && candidate.word.dir === 'down' && best.word.dir === 'across') best = candidate;
+            } else if(candidate.available > best.available){
+              best = candidate;
+            }
+          }
+
+          if(!best) return;
+          const word = best.word;
+          const coords = [];
+          for(let i=0;i<word.word.length;i++){
+            const r = word.dir === 'across' ? word.r : word.r + i;
+            const c = word.dir === 'across' ? word.c + i : word.c;
+            coords.push([r,c]);
+          }
+
+          // comenzar en la posición pegada dentro de la palabra
+          let k = best.pos;
+          for(let i=0;i<letters.length && k < coords.length;i++){
+            const [r,c] = coords[k];
+            const target = inputs.find(x => x.dataset.r == r && x.dataset.c == c);
+            if(target && !target.disabled){
+              target.value = letters[i];
+              k++;
+            } else {
+              // saltar casilla no editable sin consumir letra
+              k++;
+              i--;
+            }
+          }
+
+          // enfocar siguiente editable dentro de la misma palabra
+          for(let j=k;j<coords.length;j++){
+            const [r,c] = coords[j];
+            const next = inputs.find(x => x.dataset.r == r && x.dataset.c == c);
+            if(next && !next.disabled){ next.focus(); return; }
+          }
+
+          // si no queda dentro de la palabra, enfocar siguiente global
+          const nextGlobal = findNextCell(rr, cc);
+          if(nextGlobal) nextGlobal.focus();
+        });
+        
+        cell.appendChild(inp);
+        inputs.push(inp);
       }
-
-      cell.appendChild(inp);
-      inputs.push(inp);
-    }
-    gridEl.appendChild(cell);
-  }
-}
-
-// navegación
-function findNextCell(r,c){
-  for(let cc=c+1;cc<COLS;cc++){
-    const el = inputs.find(i=>parseInt(i.dataset.r)==r && parseInt(i.dataset.c)==cc && !i.disabled);
-    if(el) return el;
-  }
-  for(let rr=r+1; rr<ROWS; rr++){
-    for(let cc=0; cc<COLS; cc++){
-      const el = inputs.find(i=>parseInt(i.dataset.r)==rr && parseInt(i.dataset.c)==cc && !i.disabled);
-      if(el) return el;
+      gridEl.appendChild(cell);
     }
   }
-  return null;
-}
-function findPrevCell(r,c){
-  for(let cc=c-1;cc>=0;cc--){
-    const el = inputs.find(i=>parseInt(i.dataset.r)==r && parseInt(i.dataset.c)==cc && !i.disabled);
-    if(el) return el;
-  }
-  for(let rr=r-1; rr>=0; rr--){
-    for(let cc=COLS-1; cc>=0; cc--){
-      const el = inputs.find(i=>parseInt(i.dataset.r)==rr && parseInt(i.dataset.c)==cc && !i.disabled);
-      if(el) return el;
-    }
-  }
-  return null;
-}
 
-// pistas con espacio para estado + render hints toggle
-function renderClues(){
-  acrossList.innerHTML=''; downList.innerHTML='';
-  WORDS.filter(w=>w.dir==='across').forEach(w=>{
-    const li = document.createElement('li');
-    const header = document.createElement('div');
-    header.className = 'clueHeader';
-    header.innerHTML = `<span><strong>${w.word.length} letras</strong> — ${w.clue}</span><span class="clueStatus" data-id="${w.id}"></span>`;
-    const toggle = document.createElement('button');
-    toggle.className = 'toggleHints';
-    toggle.textContent = 'Más pistas';
-    toggle.addEventListener('click', ()=> {
-      more.style.display = more.style.display === 'none' ? 'block' : 'none';
-      toggle.textContent = more.style.display === 'none' ? 'Más pistas' : 'Ocultar pistas';
+  // Navegación
+  function findNextCell(r, c){
+    for(let rr=r; rr<ROWS; rr++){
+      const start_c = rr === r ? c + 1 : 0;
+      for(let cc=start_c; cc<COLS; cc++){
+        const inp = inputs.find(i => i.dataset.r == rr && i.dataset.c == cc);
+        if(inp && !inp.disabled) return inp;
+      }
+    }
+    return null;
+  }
+
+  function findPrevCell(r, c){
+    for(let rr=r; rr>=0; rr--){
+      const end_c = rr === r ? c - 1 : COLS - 1;
+      for(let cc=end_c; cc>=0; cc--){
+        const inp = inputs.find(i => i.dataset.r == rr && i.dataset.c == cc);
+        if(inp && !inp.disabled) return inp;
+      }
+    }
+    return null;
+  }
+
+  // Renderizar pistas
+  function renderClues(){
+    acrossList.innerHTML = '';
+    downList.innerHTML = '';
+    
+    WORDS.forEach(w => {
+      const div = document.createElement('div');
+      div.className = 'clue';
+      div.innerHTML = `<strong>${w.id}.</strong> ${w.clue}<div class="clue-hint">💡 ${w.hints.join(' • ')}</div>`;
+      div.id = `clue-${w.id}`;
+      
+      if(w.dir === 'across') acrossList.appendChild(div);
+      else downList.appendChild(div);
     });
-    header.appendChild(toggle);
+  }
+  renderClues();
 
-    const more = document.createElement('div');
-    more.className = 'moreHints';
-    more.innerHTML = `<div class="hintList">${w.hints.map(h=>`<div>• ${h}</div>`).join('')}</div>`;
-    more.style.display = 'none';
-
-    li.appendChild(header);
-    li.appendChild(more);
-    acrossList.appendChild(li);
-  });
-  WORDS.filter(w=>w.dir==='down').forEach(w=>{
-    const li = document.createElement('li');
-    const header = document.createElement('div');
-    header.className = 'clueHeader';
-    header.innerHTML = `<span><strong>${w.word.length} letras</strong> — ${w.clue}</span><span class="clueStatus" data-id="${w.id}"></span>`;
-    const toggle = document.createElement('button');
-    toggle.className = 'toggleHints';
-    toggle.textContent = 'Más pistas';
-    toggle.addEventListener('click', ()=> {
-      more.style.display = more.style.display === 'none' ? 'block' : 'none';
-      toggle.textContent = more.style.display === 'none' ? 'Más pistas' : 'Ocultar pistas';
+  // Comprobar y calcular nota
+  function checkAll(){
+    let correct = 0, total = 0;
+    inputs.forEach(inp => {
+      if(!inp.disabled){
+        total++;
+        if(inp.value === inp.dataset.ans){
+          inp.classList.remove('wrong');
+          inp.classList.add('correct');
+          correct++;
+        } else {
+          inp.classList.remove('correct');
+          inp.classList.add('wrong');
+        }
+      }
     });
-    header.appendChild(toggle);
-
-    const more = document.createElement('div');
-    more.className = 'moreHints';
-    more.innerHTML = `<div class="hintList">${w.hints.map(h=>`<div>• ${h}</div>`).join('')}</div>`;
-    more.style.display = 'none';
-
-    li.appendChild(header);
-    li.appendChild(more);
-    downList.appendChild(li);
-  });
-}
-renderClues();
-
-// comprobar y marcar pistas
-function checkAll(){
-  let correct = 0, total = 0;
-  inputs.forEach(inp=>{
-    const ans = (inp.dataset.ans || '').toUpperCase();
-    const val = (inp.value || '').toUpperCase();
-    if(ans){
-      total++;
-      if(val === ans){
-        inp.style.background = 'linear-gradient(90deg,#5eead4,#60f0d6)';
-        inp.style.color = '#041124';
-        correct++;
+    
+    // Marcar pistas resueltas
+    WORDS.forEach(w => {
+      let allCorrect = true;
+      for(let i=0; i<w.word.length; i++){
+        const r = w.dir === 'across' ? w.r : w.r + i;
+        const c = w.dir === 'across' ? w.c + i : w.c;
+        const inp = inputs.find(x => x.dataset.r == r && x.dataset.c == c);
+        if(inp && inp.value !== inp.dataset.ans) allCorrect = false;
+      }
+      if(allCorrect) {
+        document.getElementById(`clue-${w.id}`).classList.add('solved');
       } else {
-        inp.style.background = 'linear-gradient(90deg,#ffb4b4,#ff6b6b)';
-        inp.style.color = '#111';
+        document.getElementById(`clue-${w.id}`).classList.remove('solved');
       }
+    });
+    
+    // Calcular nota (máximo 5.0)
+    const percentage = total > 0 ? (correct / total) * 100 : 0;
+    const grade = (percentage / 100) * 5.0;
+    const gradeText = grade.toFixed(2);
+    
+    resultEl.classList.add('show');
+    if(correct === total && total > 0){
+      resultEl.classList.remove('error');
+      resultEl.innerHTML = `🎉 ¡Correcto! ¡Bravo!<div id="grade">Nota: ${gradeText} / 5.0</div>`;
+    } else {
+      resultEl.classList.add('error');
+      resultEl.innerHTML = `${correct}/${total} correctas<div id="grade">Nota: ${gradeText} / 5.0</div>`;
+    }
+  }
+
+  // Revelar
+  revealBtn.addEventListener('click', () => {
+    const pwd = prompt('Contraseña:');
+    if(pwd === '192011'){
+      inputs.forEach(inp => {
+        if(!inp.disabled) inp.value = inp.dataset.ans;
+      });
+      checkAll();
+    } else if(pwd !== null) {
+      alert('❌ Contraseña incorrecta');
     }
   });
 
-  const wordResults = WORDS.map(w=>{
-    const letters = [];
-    for(let i=0;i<w.word.length;i++){
-      const r = w.dir==='across' ? w.r : w.r + i;
-      const c = w.dir==='across' ? w.c + i : w.c;
-      const inp = inputs.find(x=>parseInt(x.dataset.r)==r && parseInt(x.dataset.c)==c);
-      const ok = inp && (inp.value||'').toUpperCase() === (inp.dataset.ans||'').toUpperCase();
-      letters.push(ok);
+  // Reiniciar
+  resetBtn.addEventListener('click', () => {
+    inputs.forEach(inp => {
+      if(!inp.disabled) {
+        inp.value = '';
+        inp.classList.remove('correct', 'wrong');
+      }
+    });
+    document.querySelectorAll('.clue').forEach(c => c.classList.remove('solved'));
+    resultEl.classList.remove('show', 'error');
+  });
+
+  // Música
+  musicBtn.addEventListener('click', () => {
+    if(music.paused) {
+      music.play();
+      musicBtn.textContent = '⏸️ Música';
+    } else {
+      music.pause();
+      musicBtn.textContent = '🎶 Música';
     }
-    return {id:w.id, word:w.word, ok: letters.every(Boolean), clue:w.clue};
   });
 
-  // actualizar indicadores junto a pistas
-  document.querySelectorAll('.clueStatus').forEach(span=>{
-    const id = parseInt(span.dataset.id,10);
-    const wr = wordResults.find(w=>w.id===id);
-    span.textContent = wr ? (wr.ok ? '✅' : '❌') : '';
-  });
+  checkBtn.addEventListener('click', checkAll);
 
-  const correctWords = wordResults.filter(w=>w.ok).length;
-  const msg = `Letras correctas: ${correct} / ${total}. Palabras completas correctas: ${correctWords} / ${WORDS.length}.`;
-  resultEl.style.display = 'block';
-  resultEl.innerHTML = `<div>${msg}</div><div style="margin-top:6px">Lista de palabras y definiciones:</div>${wordResults.map(w=>`<div style="margin-top:6px"><strong>${w.word}</strong> — ${w.clue} ${w.ok ? '✅' : '❌'}</div>`).join('')}`;
-  const nota = Math.round((correctWords/WORDS.length)*10*10)/10;
-  resultEl.innerHTML += `<div style="margin-top:8px">Nota: <span class="score">${nota}/10</span></div>`;
-}
+  // Focus inicial
+  setTimeout(() => {
+    const first = inputs.find(i => !i.disabled);
+    if(first) first.focus();
+  }, 300);
 
-// revelar y reiniciar con contraseña
-function revealAll(){
-  inputs.forEach(inp=>{
-    inp.value = inp.dataset.ans || '';
-    inp.style.background = 'linear-gradient(90deg,#ffd166,#f97316)';
-    inp.style.color = '#041124';
-  });
-  checkAll();
-}
-function resetAll(){
-  inputs.forEach(inp=>{
-    if(inp.disabled){ }
-    else { inp.value = ''; inp.style.background = ''; inp.style.color = ''; }
-  });
-  resultEl.style.display = 'none';
-  // limpiar estados junto a pistas
-  document.querySelectorAll('.clueStatus').forEach(s=> s.textContent = '');
-}
-
-checkBtn.addEventListener('click', checkAll);
-resetBtn.addEventListener('click', resetAll);
-
-// Mostrar respuestas sólo si la contraseña es correcta
-revealBtn.addEventListener('click', ()=>{
-  // pedir contraseña mediante prompt
-  const pw = prompt('Introduce la contraseña para mostrar las respuestas:');
-  // Si usuario cancela prompt, no hacer nada
-  if(pw === null) return;
-  if(pw === 'mateo9080'){
-    revealAll();
-    // pequeña confirmación visual
-    resultEl.style.display = 'block';
-    resultEl.innerHTML = `<div>Contraseña correcta. Respuestas reveladas.</div>`;
-  } else {
-    // contraseña incorrecta: mostrar mensaje de error y no revelar
-    resultEl.style.display = 'block';
-    resultEl.innerHTML = `<div style="color:var(--bad);font-weight:800">Contraseña incorrecta. No se mostrarán las respuestas.</div>`;
-    // opcional: pequeño destello rojo en el botón
-    revealBtn.animate([
-      { transform: 'translateX(0)' },
-      { transform: 'translateX(-6px)' },
-      { transform: 'translateX(6px)' },
-      { transform: 'translateX(0)' }
-    ], { duration: 300, easing: 'ease' });
-  }
-});
-
-// focus first editable input
-setTimeout(()=>{ const f = inputs.find(i=>!i.disabled); if(f) f.focus(); },300);
-
-/* --------- Snow generation (pure CSS animation, JS creates flakes) --------- */
-(function createSnow(){
-  const layer = document.getElementById('snowLayer');
-  const COUNT = 36;
-  for(let i=0;i<COUNT;i++){
-    const s = document.createElement('span');
-    s.className = 'snowflake';
-    // random positions and sizes
-    const left = Math.random()*100;
-    const size = 8 + Math.random()*14;
-    const delay = Math.random()*-20;
-    const duration = 8 + Math.random()*18;
-    s.style.left = left + 'vw';
-    s.style.fontSize = size + 'px';
-    s.style.opacity = (0.6 + Math.random()*0.6).toFixed(2);
-    s.style.animationDuration = duration + 's';
-    s.style.animationDelay = delay + 's';
-    s.innerHTML = '❆';
-    layer.appendChild(s);
-  }
-})();
-</script>
+  </script>
 </body>
 </html>
