@@ -3,560 +3,175 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Crucigrama — Arte (Navidad)</title>
+<title>Replica - Solara (mobile)</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{--bg1:#5b0f0f;--bg2:#083820;--accent:#facc15;--ok:#5eead4;--bad:#ff6b6b}
-  *{box-sizing:border-box}
-  html,body{
-    height:100%;
-    margin:0;
-    min-height:100vh;
+  :root{
+    --bg1: #060206;
+    --bg2: #0b0b0f;
+    --accent: linear-gradient(90deg,#7b3bf1,#6f2ee9 60%);
+    --glass: rgba(255,255,255,0.04);
+    --muted: #9b99a6;
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;}
+  body{
+    background: radial-gradient(ellipse at 20% 10%, rgba(120,75,200,0.06) 0%, transparent 10%),
+                radial-gradient(ellipse at 90% 80%, rgba(60,40,150,0.06) 0%, transparent 10%),
+                linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:#fff;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    padding:20px 18px 100px;
+    box-sizing:border-box;
+  }
+
+  /* Top nav */
+  .top {
     display:flex;
     align-items:center;
-    justify-content:center;
-    padding:0; /* quitar padding global para centrar exactamente */
-    background:linear-gradient(180deg,var(--bg1),var(--bg2));
-    color:#f1f7fb;
-    overflow:auto;
+    justify-content:space-between;
+    gap:12px;
+    margin-top:8px;
+  }
+  .logo {
+    display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;
+  }
+  .logo .star{width:28px;height:28px;border-radius:50%;background:linear-gradient(180deg,#111,#222);display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.05);}
+  .hamburger{width:36px;height:36px;border-radius:6px;background:transparent;border:0;display:inline-flex;align-items:center;justify-content:center;opacity:0.9}
+  .hamburger span{display:block;width:18px;height:2px;background:linear-gradient(90deg,#aaa,#888);border-radius:2px;box-shadow:0 6px 0 #6e6e76,0 -6px 0 #6e6e76;}
+
+  /* Hero */
+  .hero{
+    margin-top:18px;
+    text-align:left;
+    max-width:920px;
+  }
+  .headline{
+    font-size:44px;
+    line-height:0.98;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin:8px 0 22px 0;
+    color:#eee;
   }
 
-  .wrap{
-    width:980px;
-    max-width:98%;
-    text-align:center;
-    position:relative;
-    z-index:2;
-    margin:auto;         /* asegura centrado si hay scroll */
-    padding:22px;        /* mover padding desde body a wrap */
-    border-radius:14px;
-    background:linear-gradient(180deg, rgba(2,18,23,0.6), rgba(3,32,36,0.45));
-    box-shadow:0 12px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
-    border:2px solid rgba(250,204,21,0.08);
+  /* screenshot mock */
+  .mockwrap{
+    display:flex;justify-content:center;
+    margin:0 auto 28px;
+  }
+  .mock{
+    width:94%;
+    max-width:820px;
+    border-radius:28px;
+    padding:18px;
+    background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.15));
+    box-shadow:0 12px 40px rgba(90,40,180,0.18), inset 0 -2px 8px rgba(0,0,0,0.6);
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  .mock img{width:100%;height:auto;border-radius:12px;display:block;object-fit:cover;}
+
+  /* CTA pill */
+  .cta{
+    display:inline-block;
+    margin:6px auto 26px;
+    background:linear-gradient(90deg,#2b2540,#2c213b);
+    padding:14px 26px;
+    border-radius:999px;
+    color:#d7c9ff;
+    font-weight:600;
+    box-shadow:0 6px 20px rgba(100,50,200,0.18);
+    border:1px solid rgba(255,255,255,0.04);
   }
 
-  h1{margin:6px 0 12px;text-align:center;font-size:22px;color:var(--accent);text-shadow:0 2px 8px rgba(0,0,0,0.6)}
-  
-  .garland{height:56px;background:linear-gradient(90deg,#0b3b2e,#11473a);border-radius:10px;padding:8px 14px;display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:12px;box-shadow:0 6px 20px rgba(2,8,20,0.6)}
-  .light{width:12px;height:12px;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.6)}
-  .l1{background:#ffd166}
-  .l2{background:#fb7185}
-  .l3{background:#60a5fa}
-  .l4{background:#7ee787}
-  .garland span{transform-origin:center;animation:blink 2s infinite}
-  .garland span:nth-child(2){animation-delay:.3s}
-  .garland span:nth-child(3){animation-delay:.6s}
-  .garland span:nth-child(4){animation-delay:.9s}
-  @keyframes blink{0%,60%{filter:brightness(.6)}70%{filter:brightness(1.4)}100%{filter:brightness(.8)}}
-
-  /* --- Estilo navideño adicional --- */
-  .wrap{
-    background:linear-gradient(180deg, rgba(2,18,23,0.6), rgba(3,32,36,0.45));
-    border-radius:14px;
-    padding:22px;
-    box-shadow:0 12px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
-    border:2px solid rgba(250,204,21,0.08);
+  /* FAQ */
+  .faq-title{
+    font-size:46px;
+    font-weight:700;
+    margin:32px 0 18px 0;
+    letter-spacing:-0.01em;
+  }
+  .question{
+    margin-top:18px;
+    color:#cfcfe0;
+    font-size:20px;
+    opacity:0.95;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    max-width:860px;
+    padding:18px 10px;
   }
 
-  /* Texto del creador con cambio de colores */
-  .creator{
-    margin:8px 0 12px;
-    font-weight:800;
-    font-size:16px;
-    letter-spacing:0.6px;
-    background:linear-gradient(90deg,#ff6b66,#facc15,#60a5fa,#7ee787,#ff6b6b);
-    background-size:300% 300%;
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-    animation:colorShift 6s linear infinite;
-    text-shadow:0 2px 6px rgba(0,0,0,0.45);
-  }
-  @keyframes colorShift{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-  }
-
-  /* Copos de nieve (estilo y animación) */
-  .snowflake{
+  /* bottom pill */
+  .bottom-pill{
     position:fixed;
-    top:-10vh;
-    z-index:1;
-    pointer-events:none;
-    user-select:none;
-    color:rgba(255,255,255,0.95);
-    text-shadow:0 0 8px rgba(255,255,255,0.9);
-    font-size:18px;
-    animation-name:fall, drift;
-    animation-timing-function:linear, ease-in-out;
-    animation-iteration-count:infinite, infinite;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:18px;
+    background:linear-gradient(90deg,#6e39ff,#3b1adf);
+    padding:14px 26px;
+    border-radius:999px;
+    box-shadow:0 14px 40px rgba(80,40,180,0.35);
+    font-weight:600;
+    color:white;
+    display:flex;gap:12px;align-items:center;
+    border:1px solid rgba(255,255,255,0.06);
   }
-  @keyframes fall{
-    0%{transform:translateY(-10vh) translateX(0) rotate(0deg);opacity:1}
-    100%{transform:translateY(110vh) translateX(40px) rotate(360deg);opacity:0.6}
-  }
-  @keyframes drift{
-    0%{transform:translateX(0)}
-    50%{transform:translateX(30px)}
-    100%{transform:translateX(0)}
-  }
+  .bottom-pill small{opacity:0.9;color:rgba(255,255,255,0.9);font-weight:500;}
 
-  /* Mantener resto de estilos originales */
-  .layout{
-    display:flex;
-    gap:18px;
-    align-items:flex-start;
-    justify-content:center;
-    flex-wrap:nowrap; /* evitar que las pistas bajen encima del grid */
+  /* Responsive tweaks for smaller screens */
+  @media (max-width:420px){
+    .headline{font-size:36px;}
+    .faq-title{font-size:34px;}
+    .mock{padding:14px;border-radius:20px;}
+    .cta{padding:12px 20px;}
   }
-  .left{
-    flex: 1 1 640px;
-    min-width: 520px;
-    background:linear-gradient(180deg,#072226,#083032);
-    padding:14px;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,0.04);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-  }
-  .right{
-    flex: 0 0 320px;
-    width:320px;
-    min-width:260px;
-    background:linear-gradient(180deg,#0a2a20,#04211a);
-    padding:14px;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,0.04);
-    max-height:70vh;
-    overflow-y:auto;
-    position:sticky;
-    top:36px; /* mantiene las pistas visibles al hacer scroll */
-    align-self:flex-start;
-  }
-
-  /* Responsive: en móviles apilar pistas debajo del crucigrama */
-  @media (max-width:980px){
-    .layout{flex-direction:column;flex-wrap:wrap;align-items:center}
-    .left{min-width:0;width:100%}
-    .right{position:static;width:100%;flex:none;max-height:none}
-  }
-  
-  .grid{display:grid;grid-template-columns:repeat(15,34px);gap:4px;justify-content:center;user-select:none}
-  .cell{width:34px;height:34px;background:rgba(255,255,255,0.03);border-radius:6px;display:grid;place-items:center;position:relative;transition:transform .12s,box-shadow .12s;border:1px solid rgba(255,255,255,0.1)}
-  .cell.empty{background:transparent;border:none}
-  .cell.fixed{background:rgba(0,0,0,0.4)}
-  
-  .letter{width:100%;height:100%;text-align:center;border:none;background:transparent;color:var(--ok);font-weight:bold;font-size:14px;text-transform:uppercase;padding:0;cursor:text;transition:background .12s,color .12s}
-  .letter:focus{outline:none;background:rgba(250,204,21,0.2);color:var(--accent);box-shadow:0 0 8px rgba(250,204,21,0.4)}
-  .letter.initial{background:
-  .letter.correct{background:rgba(94,234,212,0.15);color:var(--ok)}
-  .letter.wrong{background:rgba(255,107,107,0.15);color:var(--bad)}
-  
-  .controls{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}
-  button{padding:8px 16px;background:linear-gradient(135deg,#1e40af,#0369a1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#f1f7fb;cursor:pointer;font-size:14px;font-weight:600;transition:all .2s}
-  button:hover{background:linear-gradient(135deg,#1e3a8a,#075985);box-shadow:0 4px 12px rgba(0,0,0,0.3)}
-  button:active{transform:scale(0.96)}
-  
-  h2{font-size:16px;color:var(--accent);margin:12px 0 8px;text-align:left}
-  .clues{font-size:13px;line-height:1.8}
-  .clue{text-align:left;margin-bottom:10px;padding:8px;background:rgba(255,255,255,0.02);border-radius:4px;border-left:3px solid var(--accent);transition:all .2s}
-  .clue strong{color:var(--accent)}
-  .clue-hint{font-size:12px;color:rgba(241,247,251,0.7);margin-top:2px;font-style:italic}
-  .clue.solved{opacity:0.6;text-decoration:line-through;border-left-color:var(--ok)}
-  
-  #result{margin-top:12px;padding:14px;border-radius:6px;font-weight:bold;display:none;text-align:center;background:rgba(94,234,212,0.15);border:1px solid var(--ok)}
-  #result.show{display:block}
-  #result.error{background:rgba(255,107,107,0.15);border-color:var(--bad);color:var(--bad)}
-  #grade{font-size:24px;margin-top:8px;color:var(--accent)}
-  
-  footer{margin-top:20px;font-size:12px;color:rgba(241,247,251,0.6)}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>🎨 Crucigrama — Arte 🎄</h1>
-
-    <!-- Creado por -->
-    <div class="creator">Creado por: Mateo</div>
-    
-    <div class="garland">
-      <span class="light l1"></span>
-      <span class="light l2"></span>
-      <span class="light l3"></span>
-      <span class="light l4"></span>
-    </div>
-    
-    <div class="controls">
-      <button id="musicBtn">🎶 Música</button>
-      <button id="checkBtn">✓ Comprobar</button>
-      <button id="revealBtn">👁️ Revelar</button>
-      <button id="resetBtn">↺ Reiniciar</button>
-    </div>
-    
-    <div class="layout">
-      <div class="left">
-        <div id="grid" class="grid"></div>
-        <div id="result"></div>
-      </div>
-      
-      <div class="right">
-        <h2>📋 Horizontales</h2>
-        <div id="acrossList" class="clues"></div>
-        
-        <h2>📋 Verticales</h2>
-        <div id="downList" class="clues"></div>
-      </div>
-    </div>
-    
-    <footer>Palabras: PINCELADA, PUNTILLISMO, PUNTO, ARTISTICA, SOMBRADO, COLOR, LIENZO</footer>
+  <div class="top" role="navigation" aria-label="Top Navigation">
+    <div class="logo"><span class="star">★</span><span>solara</span></div>
+    <button class="hamburger" aria-label="Menu"><span></span></button>
   </div>
-  
-  <audio id="music" loop volume="0.8" crossorigin="anonymous">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
-  </audio>
 
-  <script>
-  const ROWS = 13, COLS = 15;
-  const gridEl = document.getElementById('grid');
-  const acrossList = document.getElementById('acrossList');
-  const downList = document.getElementById('downList');
-  const resultEl = document.getElementById('result');
-  const checkBtn = document.getElementById('checkBtn');
-  const revealBtn = document.getElementById('revealBtn');
-  const resetBtn = document.getElementById('resetBtn');
-  const musicBtn = document.getElementById('musicBtn');
-  const music = document.getElementById('music');
+  <main class="hero" role="main">
+    <h1 class="headline">The First &amp; Best External<br/>Executor After Byfron.</h1>
 
-  // Crear nieve dinámica
-  function createSnowflakes(count = 40){
-    const chars = ['❄','❅','❆','✻'];
-    for(let i=0;i<count;i++){
-      const el = document.createElement('div');
-      el.className = 'snowflake';
-      el.textContent = chars[Math.floor(Math.random()*chars.length)];
-      const left = Math.random()*100;
-      const size = 10 + Math.random()*18;
-      const duration = 7 + Math.random()*8;
-      const delay = Math.random()*5;
-      el.style.left = left + 'vw';
-      el.style.fontSize = size + 'px';
-      el.style.animationDuration = `${duration}s, ${3+Math.random()*4}s`;
-      el.style.animationDelay = `${delay}s, ${delay}s`;
-      document.body.appendChild(el);
-      // eliminar después de mucho tiempo para no acumular si se recrea
-      setTimeout(()=> el.remove(), (duration+delay+2)*1000);
-    }
-    // recrear periódicamente
-    setTimeout(()=> createSnowflakes(12), 3500);
-  }
-  createSnowflakes();
+    <div class="mockwrap" aria-hidden="true">
+      <div class="mock">
+        <!-- Usar la imagen que subiste: IMG_0685.png -->
+        <img src="IMG_0685.png" alt="Mock of editor screenshot" />
+      </div>
+    </div>
 
-  const WORDS = [
-    {id:1, word:'PINCELADA', clue:'🎨 Trazo de pincel en una obra de arte', hints:['Empieza con P', 'Tiene 9 letras', 'Acción del artista'], dir:'across', r:1, c:1},
-    {id:2, word:'PUNTILLISMO', clue:'🟢 Estilo pictórico que utiliza puntos de color', hints:['Empieza con P', 'Tiene 11 letras', 'Técnica francesa del siglo XIX'], dir:'down', r:1, c:1},
-    {id:3, word:'PUNTO', clue:'⚪ Marca pequeña; base del arte', hints:['Empieza con P', 'Tiene 5 letras', 'Elemento fundamental'], dir:'across', r:5, c:3},
-    {id:4, word:'ARTISTICA', clue:'🖌️ Relativo al arte', hints:['Empieza con A', 'Tiene 9 letras', 'Adjetivo que describe obras'], dir:'down', r:2, c:10},
-    {id:5, word:'SOMBRADO', clue:'🖍️ Técnica para crear volumen mediante sombras', hints:['Empieza con S', 'Tiene 8 letras', 'Usa lápiz o carbón'], dir:'across', r:10, c:2},
-    {id:6, word:'COLOR', clue:'🌈 Atributo que percibimos por la luz', hints:['Empieza con C', 'Tiene 5 letras', 'Fundamental en pintura'], dir:'across', r:11, c:6},
-    {id:7, word:'LIENZO', clue:'🖼️ Tela sobre la que pinta el artista', hints:['Empieza con L', 'Tiene 6 letras', 'Material de pintura'], dir:'down', r:5, c:9}
-  ];
+    <div style="text-align:center;">
+      <div class="cta">We've got you covered</div>
+    </div>
 
-  // Construir matriz
-  const matrix = Array.from({length:ROWS}, ()=> 
-    Array.from({length:COLS}, ()=> ({ch:'', fixed:false, wordIds:[]}))
-  );
+    <h2 class="faq-title">Frequently Asked Questions</h2>
 
-  WORDS.forEach(w => {
-    for(let i=0; i<w.word.length; i++){
-      const r = w.dir === 'across' ? w.r : w.r + i;
-      const c = w.dir === 'across' ? w.c + i : w.c;
-      matrix[r][c] = {ch: w.word[i], fixed: true, wordIds: [...(matrix[r][c].wordIds || []), w.id]};
-    }
-  });
+    <div class="question" role="button" tabindex="0" aria-expanded="false">
+      <div>What's the official discord/telegram?</div>
+      <div style="opacity:0.8;">▾</div>
+    </div>
+  </main>
 
-  // Generar grid
-  const inputs = [];
-  const PREFILL_IDS = []; // Sin palabras prefilladas inicialmente
-  
-  for(let r=0; r<ROWS; r++){
-    for(let c=0; c<COLS; c++){
-      const cell = document.createElement('div');
-      const cellData = matrix[r][c];
-      cell.className = cellData.fixed ? 'cell fixed' : 'cell empty';
-      
-      if(cellData.fixed){
-        const inp = document.createElement('input');
-        inp.className = 'letter';
-        inp.maxLength = 1;
-        inp.dataset.r = r;
-        inp.dataset.c = c;
-        inp.dataset.ans = cellData.ch;
-        inp.autocomplete = 'off';
-        
-        // Mostrar inicial (primera letra de cada palabra)
-        const isStart = WORDS.some(w => {
-          if(w.dir === 'across') return (w.r === r && w.c === c);
-          return (w.dir === 'down' && w.r === r && w.c === c);
-        });
-        
-        if(isStart){
-          inp.value = cellData.ch;
-          inp.disabled = true;
-          inp.classList.add('initial');
-        } else {
-          inp.value = '';
-        }
-        
-        inp.addEventListener('input', e => {
-          e.target.value = e.target.value.toUpperCase().replace(/[^A-ZÑÁÉÍÓÚÜ]/g,'');
-          const next = findNextCell(r, c);
-          if(next) next.focus();
-        });
-        
-        inp.addEventListener('keydown', e => {
-          if(e.key === 'Backspace' && !e.target.value){
-            const prev = findPrevCell(r, c);
-            if(prev) {prev.focus(); prev.value = ''; e.preventDefault();}
-          }
-        });
-        
-        inp.addEventListener('paste', e => {
-          e.preventDefault();
-          const text = (e.clipboardData || window.clipboardData).getData('text') || '';
-          const letters = text.toUpperCase().replace(/[^A-ZÑÁÉÍÓÚÜ]/g,'').split('');
-          if(!letters.length) return;
+  <a class="bottom-pill" href="#" onclick="event.preventDefault();" aria-label="Visit site">
+    <strong>getsolara.dev</strong>
+    <small>— Nav. privada</small>
+  </a>
 
-          const rr = parseInt(inp.dataset.r,10);
-          const cc = parseInt(inp.dataset.c,10);
-
-          // ids de palabras que pasan por esta casilla
-          const ids = (matrix[rr] && matrix[rr][cc] && matrix[rr][cc].wordIds) ? matrix[rr][cc].wordIds : [];
-          if(!ids.length) return;
-
-          // elegir la palabra que mejor acomoda el pegado (más casillas editables desde la posición)
-          let best = null;
-          for(const id of ids){
-            const w = WORDS.find(x=>x.id===id);
-            if(!w) continue;
-            const pos = w.dir === 'across' ? (cc - w.c) : (rr - w.r);
-            if(pos < 0 || pos >= w.word.length) continue;
-            // contar casillas disponibles (no disabled) desde pos hasta final de la palabra
-            let available = 0;
-            for(let i=pos;i<w.word.length;i++){
-              const r = w.dir === 'across' ? w.r : w.r + i;
-              const c = w.dir === 'across' ? w.c + i : w.c;
-              const target = inputs.find(x => x.dataset.r == r && x.dataset.c == c);
-              if(target && !target.disabled) available++;
-            }
-            const candidate = {word:w, pos, available};
-            if(!best) { best = candidate; continue; }
-            // preferir candidato que puede alojar todas las letras; si ambos pueden, elegir el que tenga más disponible
-            if(candidate.available >= letters.length && best.available < letters.length) best = candidate;
-            else if(candidate.available >= letters.length && best.available >= letters.length){
-              // si ambos caben, preferir down sobre across para pegados verticales (heurística), o el que tenga más espacio
-              if(candidate.available > best.available) best = candidate;
-              else if(candidate.available === best.available && candidate.word.dir === 'down' && best.word.dir === 'across') best = candidate;
-            } else if(candidate.available > best.available){
-              best = candidate;
-            }
-          }
-
-          if(!best) return;
-          const word = best.word;
-          const coords = [];
-          for(let i=0;i<word.word.length;i++){
-            const r = word.dir === 'across' ? word.r : word.r + i;
-            const c = word.dir === 'across' ? word.c + i : word.c;
-            coords.push([r,c]);
-          }
-
-          // comenzar en la posición pegada dentro de la palabra
-          let k = best.pos;
-          for(let i=0;i<letters.length && k < coords.length;i++){
-            const [r,c] = coords[k];
-            const target = inputs.find(x => x.dataset.r == r && x.dataset.c == c);
-            if(target && !target.disabled){
-              target.value = letters[i];
-              k++;
-            } else {
-              // saltar casilla no editable sin consumir letra
-              k++;
-              i--;
-            }
-          }
-
-          // enfocar siguiente editable dentro de la misma palabra
-          for(let j=k;j<coords.length;j++){
-            const [r,c] = coords[j];
-            const next = inputs.find(x => x.dataset.r == r && x.dataset.c == c);
-            if(next && !next.disabled){ next.focus(); return; }
-          }
-
-          // si no queda dentro de la palabra, enfocar siguiente global
-          const nextGlobal = findNextCell(rr, cc);
-          if(nextGlobal) nextGlobal.focus();
-        });
-        
-        cell.appendChild(inp);
-        inputs.push(inp);
-      }
-      gridEl.appendChild(cell);
-    }
-  }
-
-  // Navegación
-  function findNextCell(r, c){
-    for(let rr=r; rr<ROWS; rr++){
-      const start_c = rr === r ? c + 1 : 0;
-      for(let cc=start_c; cc<COLS; cc++){
-        const inp = inputs.find(i => i.dataset.r == rr && i.dataset.c == cc);
-        if(inp && !inp.disabled) return inp;
-      }
-    }
-    return null;
-  }
-
-  function findPrevCell(r, c){
-    for(let rr=r; rr>=0; rr--){
-      const end_c = rr === r ? c - 1 : COLS - 1;
-      for(let cc=end_c; cc>=0; cc--){
-        const inp = inputs.find(i => i.dataset.r == rr && i.dataset.c == cc);
-        if(inp && !inp.disabled) return inp;
-      }
-    }
-    return null;
-  }
-
-  // Renderizar pistas
-  function renderClues(){
-    acrossList.innerHTML = '';
-    downList.innerHTML = '';
-    
-    WORDS.forEach(w => {
-      const div = document.createElement('div');
-      div.className = 'clue';
-      div.innerHTML = `<strong>${w.id}.</strong> ${w.clue}<div class="clue-hint">💡 ${w.hints.join(' • ')}</div>`;
-      div.id = `clue-${w.id}`;
-      
-      if(w.dir === 'across') acrossList.appendChild(div);
-      else downList.appendChild(div);
+<!-- Minimal JS to animate FAQ chevron -->
+<script>
+  document.querySelectorAll('.question').forEach(q=>{
+    q.addEventListener('click', ()=>{
+      const expanded = q.getAttribute('aria-expanded') === 'true';
+      q.setAttribute('aria-expanded', !expanded);
+      q.style.opacity = expanded ? '0.95' : '1';
     });
-  }
-  renderClues();
-
-  // Comprobar y calcular nota
-  function checkAll(){
-    let correct = 0, total = 0;
-    inputs.forEach(inp => {
-      if(!inp.disabled){
-        total++;
-        if(inp.value === inp.dataset.ans){
-          inp.classList.remove('wrong');
-          inp.classList.add('correct');
-          correct++;
-        } else {
-          inp.classList.remove('correct');
-          inp.classList.add('wrong');
-        }
-      }
-    });
-    
-    // Marcar pistas resueltas
-    WORDS.forEach(w => {
-      let allCorrect = true;
-      for(let i=0; i<w.word.length; i++){
-        const r = w.dir === 'across' ? w.r : w.r + i;
-        const c = w.dir === 'across' ? w.c + i : w.c;
-        const inp = inputs.find(x => x.dataset.r == r && x.dataset.c == c);
-        if(inp && inp.value !== inp.dataset.ans) allCorrect = false;
-      }
-      if(allCorrect) {
-        document.getElementById(`clue-${w.id}`).classList.add('solved');
-      } else {
-        document.getElementById(`clue-${w.id}`).classList.remove('solved');
-      }
-    });
-    
-    // Calcular nota (máximo 5.0)
-    const percentage = total > 0 ? (correct / total) * 100 : 0;
-    const grade = (percentage / 100) * 5.0;
-    const gradeText = grade.toFixed(2);
-    
-    resultEl.classList.add('show');
-    if(correct === total && total > 0){
-      resultEl.classList.remove('error');
-      resultEl.innerHTML = `🎉 ¡Correcto! ¡Bravo!<div id="grade">Nota: ${gradeText} / 5.0</div>`;
-    } else {
-      resultEl.classList.add('error');
-      resultEl.innerHTML = `${correct}/${total} correctas<div id="grade">Nota: ${gradeText} / 5.0</div>`;
-    }
-  }
-
-  // Revelar
-  revealBtn.addEventListener('click', () => {
-    const pwd = prompt('Contraseña:');
-    if(pwd === '192011'){
-      inputs.forEach(inp => {
-        if(!inp.disabled) inp.value = inp.dataset.ans;
-      });
-      checkAll();
-    } else if(pwd !== null) {
-      alert('❌ Contraseña incorrecta');
-    }
   });
-
-  // Reiniciar
-  resetBtn.addEventListener('click', () => {
-    inputs.forEach(inp => {
-      if(!inp.disabled) {
-        inp.value = '';
-        inp.classList.remove('correct', 'wrong');
-      }
-    });
-    document.querySelectorAll('.clue').forEach(c => c.classList.remove('solved'));
-    resultEl.classList.remove('show', 'error');
-  });
-
-  // Música - reproducir automáticamente o al hacer click
-  let musicStarted = false;
-
-  function startMusic() {
-    if (!musicStarted) {
-      music.play().catch(err => {
-        console.log('Error al reproducir música:', err);
-      });
-      musicStarted = true;
-      musicBtn.textContent = '⏸️ Música';
-    }
-  }
-
-  // Intentar reproducir al cargar
-  window.addEventListener('load', () => {
-    startMusic();
-  });
-
-  // Si falla el autoplay, reproducir al primer click en la página
-  document.addEventListener('click', startMusic, { once: true });
-
-  musicBtn.addEventListener('click', () => {
-    if (music.paused) {
-      music.play().catch(err => console.log('Error:', err));
-      musicBtn.textContent = '⏸️ Música';
-    } else {
-      music.pause();
-      musicBtn.textContent = '🎶 Música';
-    }
-  });
-
-  checkBtn.addEventListener('click', checkAll);
-
-  // Focus inicial
-  setTimeout(() => {
-    const first = inputs.find(i => !i.disabled);
-    if(first) first.focus();
-  }, 300);
-
-  </script>
+</script>
 </body>
 </html>
