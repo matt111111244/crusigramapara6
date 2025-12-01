@@ -9,7 +9,7 @@
     body {
         margin: 0;
         font-family: "Poppins", sans-serif;
-        background: #fbeaff;
+        background: linear-gradient(135deg, #fbeaff, #ffe8f8);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -18,45 +18,50 @@
     }
 
     /* Animación suave */
-    .fade {
-        animation: fadeIn 0.6s ease forwards;
-        opacity: 0;
-    }
-    @keyframes fadeIn {
-        to { opacity: 1; }
+    .fade { animation: fadeIn 0.6s ease forwards; opacity: 0; }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    .slide { animation: slideUp 0.5s ease; }
+    @keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
     }
 
-    /* LOGIN */
+    /* CUADROS */
     #loginBox, #panel {
-        background: #ffffff;
+        background: rgba(255,255,255,0.9);
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 0 18px rgba(0,0,0,0.1);
+        box-shadow: 0 0 25px rgba(0,0,0,0.1);
         width: 90%;
         max-width: 380px;
         text-align: center;
+        backdrop-filter: blur(8px);
+        transition: 0.3s;
     }
 
-    #loginBox h1, #panel h1 {
+    #loginBox:hover, #panel:hover {
+        transform: scale(1.02);
+    }
+
+    h1 {
         color: #c56bee;
         margin-bottom: 20px;
         font-size: 26px;
     }
 
-    input {
+    /* INPUTS */
+    input, textarea {
         width: 95%;
         padding: 14px;
-        margin-top: 12px;
         border-radius: 10px;
         border: 2px solid #f3c2ff;
         outline: none;
         font-size: 15px;
-        transition: 0.3s;
+        transition: 0.25s;
     }
 
-    input:focus {
-        border-color: #c56bee;
-    }
+    input:focus, textarea:focus { border-color: #c56bee; }
 
     button {
         margin-top: 18px;
@@ -69,18 +74,13 @@
         font-weight: bold;
         border-radius: 10px;
         cursor: pointer;
-        transition: 0.3s;
+        transition: 0.25s;
     }
 
-    button:hover {
-        background: #ab55d6;
-    }
+    button:hover { background: #ab55d6; transform: scale(1.03); }
 
     /* PANEL */
-    #panel {
-        display: none;
-        max-width: 450px;
-    }
+    #panel { display: none; max-width: 450px; }
 
     #hora, #fecha {
         font-size: 16px;
@@ -89,40 +89,34 @@
     }
 
     textarea {
-        width: 100%;
         height: 120px;
-        padding: 12px;
-        border-radius: 10px;
-        border: 2px solid #f3c2ff;
-        font-size: 15px;
-        outline: none;
-        margin-top: 10px;
         resize: none;
+        margin-top: 10px;
     }
 
-    textarea:focus {
-        border-color: #c56bee;
-    }
-
+    /* ACTIVIDADES */
     .itemBox {
         background: #f8d9ff;
         padding: 12px;
-        border-radius: 10px;
+        border-radius: 12px;
         margin-top: 12px;
         text-align: left;
         color: #5a2d74;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: slideUp 0.5s ease;
+    }
+
+    .icono {
+        font-size: 22px;
     }
 
     @media (max-width: 500px) {
-        #loginBox, #panel {
-            padding: 22px;
-            max-width: 90%;
-        }
-        h1 {
-            font-size: 22px;
-        }
+        #loginBox, #panel { max-width: 90%; }
+        h1 { font-size: 22px; }
     }
-
 </style>
 </head>
 <body>
@@ -139,6 +133,7 @@
 <!-- PANEL PRINCIPAL -->
 <div id="panel" class="fade">
     <h1>Inventario del Día</h1>
+
     <div id="hora"></div>
     <div id="fecha"></div>
 
@@ -149,7 +144,7 @@
 </div>
 
 <script>
-    // Login
+    // LOGIN
     function login() {
         const pass = document.getElementById("pass").value;
         const error = document.getElementById("error");
@@ -161,26 +156,37 @@
         }
     }
 
-    // Reloj en vivo
+    // RELOJ
     function actualizarHora() {
         const now = new Date();
         document.getElementById("hora").textContent =
             "Hora: " + now.toLocaleTimeString();
-
         document.getElementById("fecha").textContent =
             "Fecha: " + now.toLocaleDateString();
     }
     setInterval(actualizarHora, 1000);
     actualizarHora();
 
-    // Guardar actividades
+    // Iconos de inventario
+    const iconos = ["💖", "⭐", "✔️"];
+
+    // GUARDAR ACTIVIDAD
     function guardarActividad() {
         const texto = document.getElementById("actividad").value;
         if (texto.trim() === "") return;
 
         const item = document.createElement("div");
-        item.className = "itemBox";
-        item.textContent = texto;
+        item.className = "itemBox slide";
+
+        const icono = document.createElement("span");
+        icono.className = "icono";
+        icono.textContent = iconos[Math.floor(Math.random() * iconos.length)];
+
+        const contenido = document.createElement("span");
+        contenido.textContent = texto;
+
+        item.appendChild(icono);
+        item.appendChild(contenido);
 
         document.getElementById("lista").appendChild(item);
         document.getElementById("actividad").value = "";
