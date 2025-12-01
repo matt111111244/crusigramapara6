@@ -1,245 +1,60 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Solara Replica</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Jolly y Mateo</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: #fdeaff;
+            color: #4a235a;
+        }
 
-<style>
-/* ==== GLOBAL ==== */
-:root{
-  --bg1:#060206;
-  --bg2:#0b0b0f;
-}
-html,body{
-  margin:0;
-  padding:0;
-  font-family:Inter, sans-serif;
-  color:white;
-  background:linear-gradient(180deg,var(--bg1),var(--bg2));
-}
+        header {
+            background: #e7a8f2;
+            padding: 40px;
+            text-align: center;
+            color: white;
+            font-size: 36px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
 
-/* ==== TOP BAR ==== */
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px;
-  padding-top:40px;
-}
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:24px;
-  font-weight:700;
-}
-.logo .star{
-  display:inline-flex;
-  width:26px;height:26px;
-  align-items:center;
-  justify-content:center;
-  border-radius:50%;
-  background:#222;
-}
-.hamburger{
-  width:30px;
-  height:30px;
-  background:transparent;
-  border:0;
-}
-.hamburger span{
-  display:block;
-  width:20px;height:2px;
-  background:white;
-  box-shadow:0 6px white,0 -6px white;
-}
+        .cont {
+            max-width: 900px;
+            margin: 60px auto;
+            background: #ffffff;
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+            font-size: 32px;
+            color: #c56bee;
+            font-weight: bold;
+        }
 
-/* ==== HEADLINE ==== */
-.headline{
-  font-size:38px;
-  font-weight:700;
-  padding:0 20px;
-  margin-top:10px;
-  line-height:1.1;
-}
-
-/* ==== MOCK SCREENSHOT ==== */
-.mockwrap{
-  margin-top:25px;
-  padding:0 20px;
-}
-.mock{
-  background:rgba(255,255,255,0.05);
-  border-radius:20px;
-  padding:15px;
-  border:1px solid rgba(255,255,255,0.05);
-}
-.mock img{
-  width:100%;
-  border-radius:12px;
-}
-
-/* ==== CTA PILL ==== */
-.cta{
-  text-align:center;
-  margin-top:25px;
-}
-.cta div{
-  display:inline-block;
-  padding:14px 26px;
-  background:#2c213b;
-  border-radius:30px;
-  color:#d7c9ff;
-  font-weight:600;
-}
-
-/* ==== FAQ ==== */
-.faq-title{
-  font-size:32px;
-  font-weight:700;
-  padding:0 20px;
-  margin-top:40px;
-  margin-bottom:20px;
-}
-.question{
-  padding:18px 20px;
-  font-size:20px;
-  display:flex;
-  justify-content:space-between;
-  opacity:0.9;
-}
-
-/* ==== SOLARA CARD (NEW SECTION) ==== */
-.solara-card{
-  width:90%;
-  margin:60px auto;
-  background:#180020; /* opción 2 */
-  border-radius:28px;
-  padding:60px 20px;
-  text-align:center;
-  border:1px solid rgba(255,255,255,0.05);
-  box-shadow:0 10px 40px rgba(120,60,220,0.3);
-}
-.solara-card h2{
-  font-size:40px;
-  font-weight:700;
-  margin-bottom:30px;
-}
-.download-btn{
-  background:#6f2ee9;
-  border:0;
-  padding:14px 32px;
-  font-size:20px;
-  font-weight:600;
-  border-radius:14px;
-  color:white;
-}
-
-/* ==== FOOTER LOGO ==== */
-.footer-logo{
-  margin:50px 0 90px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  justify-content:center;
-  font-size:32px;
-  font-weight:700;
-}
-.footer-logo .star{
-  display:inline-flex;
-  width:26px;height:26px;
-  align-items:center;
-  justify-content:center;
-  border-radius:50%;
-  background:#222;
-}
-
-/* ==== BOTTOM PILL ==== */
-.bottom-pill{
-  position:fixed;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#2b2540;
-  padding:14px 26px;
-  border-radius:40px;
-  color:white;
-  text-decoration:none;
-  font-weight:600;
-  border:1px solid rgba(255,255,255,0.1);
-  display:flex;
-  gap:8px;
-}
-.bottom-pill small{opacity:0.8;}
-</style>
+        footer {
+            background: #e7a8f2;
+            padding: 20px;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            margin-top: 60px;
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- Top -->
-<div class="top">
-  <div class="logo">
-    <span class="star">★</span> solara
-  </div>
-  <button class="hamburger"><span></span></button>
-</div>
+    <header>Página de Jolly y Mateo</header>
 
-<!-- Headline -->
-<h1 class="headline">
-  The First & Best External<br>Executor After Byfron.
-</h1>
+    <div class="cont">
+        Página de Jolly y Mateo
+    </div>
 
-<!-- Screenshot -->
-<div class="mockwrap">
-  <div class="mock">
-    <img src="IMG_0688.jpeg" alt="Solara editor screenshot">
-  </div>
-</div>
-
-<!-- CTA -->
-<div class="cta">
-  <div>We've got you covered</div>
-</div>
-
-<!-- FAQ -->
-<h2 class="faq-title">Frequently Asked Questions</h2>
-
-<div class="question">
-  What's the official discord/telegram?
-  <span>▾</span>
-</div>
-<div class="question">
-  How much sUNC / UNC?
-  <span>▾</span>
-</div>
-<div class="question">
-  Why is this free?
-  <span>▾</span>
-</div>
-<div class="question">
-  How do I contact the developer?
-  <span>▾</span>
-</div>
-
-<!-- NEW PURPLE CARD -->
-<div class="solara-card">
-  <h2>Solara.</h2>
-  <button class="download-btn">Download</button>
-</div>
-
-<!-- Footer Logo -->
-<div class="footer-logo">
-  <span class="star">★</span> solara
-</div>
-
-<!-- Bottom pill -->
-<a class="bottom-pill" href="#">
-  <strong>getsolara.dev</strong>
-  <small>— Nav. privada</small>
-</a>
+    <footer>Página de Jolly y Mateo</footer>
 
 </body>
 </html>
