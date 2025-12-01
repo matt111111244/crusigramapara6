@@ -6,112 +6,111 @@
 <title>Página de Jolly</title>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-    body {
-        margin: 0;
-        font-family: "Poppins", sans-serif;
-        background: linear-gradient(135deg, #ffe6f4, #f9dfff);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        padding: 10px;
-    }
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #ffe6f4, #f9dfff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px;
+    flex-direction: column;
+}
 
-    /* Animación máquina de escribir */
-    .typing {
-        display: inline-block;
-        border-right: 2px solid #ca4bc9;
-        white-space: nowrap;
-        overflow: hidden;
-        animation: typing 2s steps(15), blink 0.5s step-end infinite alternate;
-        font-size: 28px;
-        font-weight: bold;
-        color: #ca4bc9;
-        margin-bottom: 10px;
-    }
+/* Animación máquina de escribir */
+.typing {
+    display: inline-block;
+    border-right: 2px solid #ca4bc9;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 2s steps(15), blink 0.5s step-end infinite alternate;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ca4bc9;
+    margin-bottom: 20px;
+}
 
-    @keyframes typing { from { width: 0 } to { width: 100% } }
-    @keyframes blink { 50% { border-color: transparent } }
+@keyframes typing { from { width: 0 } to { width: 100% } }
+@keyframes blink { 50% { border-color: transparent } }
 
-    .fade { animation: fadeIn 0.6s ease forwards; opacity: 0; }
-    @keyframes fadeIn { to { opacity: 1; } }
+.fade { animation: fadeIn 0.6s ease forwards; opacity: 0; }
+@keyframes fadeIn { to { opacity: 1; } }
 
-    #loginBox, .panel {
-        background: #ffffffd9;
-        padding: 35px;
-        border-radius: 18px;
-        width: 90%;
-        max-width: 500px;
-        box-shadow: 0 0 25px rgba(255, 140, 200, 0.3);
-        backdrop-filter: blur(10px);
-        text-align: center;
-    }
+#loginBox, #panel {
+    background: #ffffffd9;
+    padding: 35px;
+    border-radius: 18px;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: 0 0 25px rgba(255, 140, 200, 0.3);
+    backdrop-filter: blur(10px);
+    text-align: center;
+}
 
-    input, textarea, select, button {
-        width: 100%;
-        padding: 13px;
-        margin-top: 10px;
-        border-radius: 12px;
-        border: 2px solid #f3b8ff;
-        outline: none;
-        font-size: 15px;
-        background: #fff;
-        transition: 0.25s;
-    }
+input, textarea, button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: 2px solid #f3b8ff;
+    outline: none;
+    font-size: 15px;
+    background: #fff;
+    transition: 0.25s;
+}
 
-    input:focus, textarea:focus {
-        border-color: #ca4bc9;
-    }
+input:focus, textarea:focus {
+    border-color: #ca4bc9;
+}
 
-    button {
-        margin-top: 18px;
-        background: #ca4bc9;
-        border: none;
-        color: white;
-        font-size: 17px;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
+button {
+    margin-top: 18px;
+    background: #ca4bc9;
+    border: none;
+    color: white;
+    font-size: 17px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-    button:hover { background: #b63cb3; }
+button:hover { background: #b63cb3; }
 
-    textarea { height: 110px; resize: none; }
+textarea { height: 110px; resize: none; }
 
-    .itemBox {
-        background: #ffe9fa;
-        padding: 14px;
-        border-radius: 12px;
-        text-align: left;
-        margin-top: 12px;
-        color: #663a75;
-        animation: fadeIn 0.4s ease;
-    }
+.itemBox {
+    background: #ffe9fa;
+    padding: 14px;
+    border-radius: 12px;
+    text-align: left;
+    margin-top: 12px;
+    color: #663a75;
+    animation: fadeIn 0.4s ease;
+}
 
-    .consolidadoBox {
-        background: #ffe0f7;
-        padding: 18px;
-        border-radius: 12px;
-        margin-top: 20px;
-        text-align: left;
-        color: #663a75;
-        font-size: 15px;
-    }
+.consolidadoBox {
+    background: #ffe0f7;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 20px;
+    text-align: left;
+    color: #663a75;
+    font-size: 15px;
+}
 
-    .icono { font-size: 20px; margin-right: 5px; }
+.icono { font-size: 20px; margin-right: 5px; }
 
-    .panel-section {
-        margin-top: 20px;
-    }
-
-    .section-title {
-        font-weight: 600;
-        color: #b63cb3;
-        margin-bottom: 10px;
-        font-size: 18px;
-    }
+.casilla {
+    border: 2px solid #f3b8ff;
+    border-radius: 14px;
+    padding: 15px;
+    margin-top: 20px;
+    background: #fff0f8;
+}
+.casilla-title { font-weight: 600; color: #b63cb3; margin-bottom: 10px; font-size: 18px; }
 </style>
 </head>
 <body>
@@ -127,148 +126,122 @@
 
 <!-- PANEL -->
 <div id="panel" class="fade" style="display:none;">
-
-    <!-- Sección de actividades 1 -->
-    <div class="panel panel-section" id="section1">
-        <div class="section-title">Actividades 1-2</div>
-        <textarea id="actividad1" placeholder="¿Qué actividad harás?"></textarea>
-        <label>Fecha de entrega:</label>
-        <input type="date" id="fechaEntrega1">
-        <label>Hora de entrega:</label>
-        <input type="time" id="horaEntrega1">
-        <button onclick="guardarActividad(1)">Guardar actividad</button>
-        <div id="lista1"></div>
-        <div class="consolidadoBox" id="consolidado1"></div>
-    </div>
-
-    <!-- Sección de actividades 2 -->
-    <div class="panel panel-section" id="section2" style="display:none;">
-        <div class="section-title">Actividades 3-4</div>
-        <textarea id="actividad2" placeholder="¿Qué actividad harás?"></textarea>
-        <label>Fecha de entrega:</label>
-        <input type="date" id="fechaEntrega2">
-        <label>Hora de entrega:</label>
-        <input type="time" id="horaEntrega2">
-        <button onclick="guardarActividad(2)">Guardar actividad</button>
-        <div id="lista2"></div>
-        <div class="consolidadoBox" id="consolidado2"></div>
-    </div>
-
-    <button onclick="exportarWord()">Descargar Word</button>
+    <div id="casillasContainer"></div>
+    <button style="margin-top:25px;" onclick="exportarWord()">Descargar Word</button>
 </div>
 
 <script>
-    // LOGIN
-    function login() {
-        const pass = document.getElementById("pass").value;
-        if(pass === "jolly") {
-            document.getElementById("loginBox").style.display = "none";
-            document.getElementById("panel").style.display = "block";
-            cargarActividadesGuardadas();
-        } else {
-            document.getElementById("error").textContent = "Contraseña incorrecta.";
-        }
+const iconos = ["💖", "✨", "🌸", "💕"];
+let casillas = [];
+
+function login() {
+    const pass = document.getElementById("pass").value;
+    if(pass === "jolly") {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("panel").style.display = "block";
+        cargarCasillas();
+        if(casillas.length === 0) crearNuevaCasilla();
+    } else {
+        document.getElementById("error").textContent = "Contraseña incorrecta.";
     }
+}
 
-    const iconos = ["💖", "✨", "🌸", "💕"];
-    let actividades1 = [];
-    let actividades2 = [];
+function crearNuevaCasilla() {
+    const numero = casillas.length + 1;
+    const casilla = { numero, actividades: [] };
+    casillas.push(casilla);
+    renderCasillas();
+}
 
-    function guardarActividad(seccion) {
-        let texto, fecha, hora, listaDiv, consolidadoDiv, arr;
+function guardarActividad(casillaIndex) {
+    const casilla = casillas[casillaIndex];
+    const texto = document.getElementById(`actividad${casilla.numero}`).value.trim();
+    const fecha = document.getElementById(`fechaEntrega${casilla.numero}`).value;
+    const hora = document.getElementById(`horaEntrega${casilla.numero}`).value;
 
-        if(seccion === 1) {
-            texto = document.getElementById("actividad1").value.trim();
-            fecha = document.getElementById("fechaEntrega1").value;
-            hora = document.getElementById("horaEntrega1").value;
-            listaDiv = document.getElementById("lista1");
-            consolidadoDiv = document.getElementById("consolidado1");
-            arr = actividades1;
-        } else {
-            texto = document.getElementById("actividad2").value.trim();
-            fecha = document.getElementById("fechaEntrega2").value;
-            hora = document.getElementById("horaEntrega2").value;
-            listaDiv = document.getElementById("lista2");
-            consolidadoDiv = document.getElementById("consolidado2");
-            arr = actividades2;
-        }
+    if(texto === "" || fecha === "" || hora === "") { alert("Completa actividad, fecha y hora."); return; }
+    if(casilla.actividades.length >= 2) { return; } // Límite 2 por casilla
 
-        if(texto === "" || fecha === "" || hora === "") { alert("Completa actividad, fecha y hora."); return; }
-        if(arr.length >= 2) { alert("Ya alcanzaste el límite de 2 actividades en esta sección."); return; }
+    const icono = iconos[Math.floor(Math.random()*iconos.length)];
+    casilla.actividades.push({ texto, fecha, hora, icono });
 
-        const icono = iconos[Math.floor(Math.random() * iconos.length)];
-        arr.push({ texto, fecha, hora, icono });
+    localStorage.setItem("casillasJolly", JSON.stringify(casillas));
 
-        // Guardar en localStorage
-        localStorage.setItem("actividades1", JSON.stringify(actividades1));
-        localStorage.setItem("actividades2", JSON.stringify(actividades2));
+    renderCasillas();
 
-        actualizarLista(arr, listaDiv);
-        actualizarConsolidado(arr, consolidadoDiv);
+    // Limpiar inputs
+    document.getElementById(`actividad${casilla.numero}`).value = "";
+    document.getElementById(`fechaEntrega${casilla.numero}`).value = "";
+    document.getElementById(`horaEntrega${casilla.numero}`).value = "";
 
-        // Limpiar inputs
-        if(seccion === 1) {
-            document.getElementById("actividad1").value = "";
-            document.getElementById("fechaEntrega1").value = "";
-            document.getElementById("horaEntrega1").value = "";
-            if(actividades1.length === 2) document.getElementById("section2").style.display = "block";
-        } else {
-            document.getElementById("actividad2").value = "";
-            document.getElementById("fechaEntrega2").value = "";
-            document.getElementById("horaEntrega2").value = "";
-        }
-    }
+    // Si la casilla se llenó, crear una nueva automáticamente
+    if(casilla.actividades.length === 2) crearNuevaCasilla();
+}
 
-    function actualizarLista(arr, listaDiv) {
+function renderCasillas() {
+    const container = document.getElementById("casillasContainer");
+    container.innerHTML = "";
+    casillas.forEach((casilla, index)=>{
+        const div = document.createElement("div");
+        div.className = "casilla";
+        div.innerHTML = `
+            <div class="casilla-title">Casilla ${casilla.numero}</div>
+            <textarea id="actividad${casilla.numero}" placeholder="¿Qué actividad harás?"></textarea>
+            <label>Fecha de entrega:</label>
+            <input type="date" id="fechaEntrega${casilla.numero}">
+            <label>Hora de entrega:</label>
+            <input type="time" id="horaEntrega${casilla.numero}">
+            <button onclick="guardarActividad(${index})">Guardar actividad</button>
+            <div id="lista${casilla.numero}"></div>
+        `;
+        container.appendChild(div);
+
+        // Renderizar actividades guardadas
+        const listaDiv = document.getElementById(`lista${casilla.numero}`);
         listaDiv.innerHTML = "";
-        arr.forEach((obj, index) => {
+        casilla.actividades.forEach((act,i)=>{
             const item = document.createElement("div");
             item.className = "itemBox";
             item.innerHTML = `
-                <div><span class="icono">${obj.icono}</span> <b>${index + 1}. ${obj.texto}</b></div>
-                <div>📅 Fecha: ${obj.fecha}</div>
-                <div>⏰ Hora: ${obj.hora}</div>
+                <div><span class="icono">${act.icono}</span> <b>${i+1}. ${act.texto}</b></div>
+                <div>📅 Fecha: ${act.fecha}</div>
+                <div>⏰ Hora: ${act.hora}</div>
             `;
             listaDiv.appendChild(item);
         });
-    }
 
-    function actualizarConsolidado(arr, consolidadoDiv) {
-        let html = "<b>Consolidado:</b><br><br>";
-        arr.forEach((a,i)=>{
-            html += `${i+1}. ${a.texto}<br>➤ Fecha: ${a.fecha}<br>➤ Hora: ${a.hora}<br><br>`;
+        // Si ya hay 2 actividades, desactivar inputs
+        if(casilla.actividades.length >= 2){
+            document.getElementById(`actividad${casilla.numero}`).disabled = true;
+            document.getElementById(`fechaEntrega${casilla.numero}`).disabled = true;
+            document.getElementById(`horaEntrega${casilla.numero}`).disabled = true;
+        }
+    });
+}
+
+function cargarCasillas() {
+    const guardadas = localStorage.getItem("casillasJolly");
+    if(guardadas) casillas = JSON.parse(guardadas);
+    renderCasillas();
+}
+
+function exportarWord() {
+    let contenido = "";
+    casillas.forEach(c=>{
+        contenido += `<b>Casilla ${c.numero}</b><br>`;
+        c.actividades.forEach((a,i)=>{
+            contenido += `${i+1}. ${a.texto}<br>➤ Fecha: ${a.fecha}<br>➤ Hora: ${a.hora}<br><br>`;
         });
-        consolidadoDiv.innerHTML = html;
-    }
-
-    function cargarActividadesGuardadas() {
-        const guardadas1 = localStorage.getItem("actividades1");
-        const guardadas2 = localStorage.getItem("actividades2");
-
-        if(guardadas1) {
-            actividades1 = JSON.parse(guardadas1);
-            actualizarLista(actividades1, document.getElementById("lista1"));
-            actualizarConsolidado(actividades1, document.getElementById("consolidado1"));
-            if(actividades1.length === 2) document.getElementById("section2").style.display = "block";
-        }
-        if(guardadas2) {
-            actividades2 = JSON.parse(guardadas2);
-            actualizarLista(actividades2, document.getElementById("lista2"));
-            actualizarConsolidado(actividades2, document.getElementById("consolidado2"));
-        }
-    }
-
-    function exportarWord() {
-        const contenido = document.getElementById("consolidado1").innerHTML + "<br>" + document.getElementById("consolidado2").innerHTML;
-        const estilo = "<style>body { font-family: Poppins, sans-serif; color: #663a75; }</style>";
-        const blob = new Blob(["<html><head><meta charset='UTF-8'>" + estilo + "</head><body>" + contenido + "</body></html>"], {type: "application/msword"});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "Consolidado_Jolly.doc";
-        link.click();
-        URL.revokeObjectURL(url);
-    }
+    });
+    const estilo = "<style>body { font-family: Poppins, sans-serif; color: #663a75; }</style>";
+    const blob = new Blob(["<html><head><meta charset='UTF-8'>" + estilo + "</head><body>" + contenido + "</body></html>"], {type:"application/msword"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "Consolidado_Jolly.doc";
+    link.click();
+    URL.revokeObjectURL(url);
+}
 </script>
 </body>
 </html>
