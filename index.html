@@ -1,60 +1,191 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Jolly y Mateo</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Página de Jolly y Mateo</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: "Poppins", sans-serif;
-            background: #fdeaff;
-            color: #4a235a;
-        }
+<style>
+    body {
+        margin: 0;
+        font-family: "Poppins", sans-serif;
+        background: #fbeaff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
 
-        header {
-            background: #e7a8f2;
-            padding: 40px;
-            text-align: center;
-            color: white;
-            font-size: 36px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
+    /* Animación suave */
+    .fade {
+        animation: fadeIn 0.6s ease forwards;
+        opacity: 0;
+    }
+    @keyframes fadeIn {
+        to { opacity: 1; }
+    }
 
-        .cont {
-            max-width: 900px;
-            margin: 60px auto;
-            background: #ffffff;
-            padding: 60px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            text-align: center;
-            font-size: 32px;
-            color: #c56bee;
-            font-weight: bold;
-        }
+    /* LOGIN */
+    #loginBox, #panel {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 18px rgba(0,0,0,0.1);
+        width: 90%;
+        max-width: 380px;
+        text-align: center;
+    }
 
-        footer {
-            background: #e7a8f2;
-            padding: 20px;
-            text-align: center;
-            color: white;
-            font-size: 18px;
-            margin-top: 60px;
+    #loginBox h1, #panel h1 {
+        color: #c56bee;
+        margin-bottom: 20px;
+        font-size: 26px;
+    }
+
+    input {
+        width: 95%;
+        padding: 14px;
+        margin-top: 12px;
+        border-radius: 10px;
+        border: 2px solid #f3c2ff;
+        outline: none;
+        font-size: 15px;
+        transition: 0.3s;
+    }
+
+    input:focus {
+        border-color: #c56bee;
+    }
+
+    button {
+        margin-top: 18px;
+        width: 100%;
+        padding: 14px;
+        background: #c56bee;
+        border: none;
+        color: white;
+        font-size: 17px;
+        font-weight: bold;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: #ab55d6;
+    }
+
+    /* PANEL */
+    #panel {
+        display: none;
+        max-width: 450px;
+    }
+
+    #hora, #fecha {
+        font-size: 16px;
+        margin: 5px 0;
+        color: #444;
+    }
+
+    textarea {
+        width: 100%;
+        height: 120px;
+        padding: 12px;
+        border-radius: 10px;
+        border: 2px solid #f3c2ff;
+        font-size: 15px;
+        outline: none;
+        margin-top: 10px;
+        resize: none;
+    }
+
+    textarea:focus {
+        border-color: #c56bee;
+    }
+
+    .itemBox {
+        background: #f8d9ff;
+        padding: 12px;
+        border-radius: 10px;
+        margin-top: 12px;
+        text-align: left;
+        color: #5a2d74;
+    }
+
+    @media (max-width: 500px) {
+        #loginBox, #panel {
+            padding: 22px;
+            max-width: 90%;
         }
-    </style>
+        h1 {
+            font-size: 22px;
+        }
+    }
+
+</style>
 </head>
 <body>
 
-    <header>Página de Jolly y Mateo</header>
+<!-- LOGIN -->
+<div id="loginBox" class="fade">
+    <h1>Página de Jolly y Mateo</h1>
+    <p style="color:#333;">Inicia sesión</p>
+    <input id="pass" type="password" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+    <p id="error" style="color:red; margin-top:10px;"></p>
+</div>
 
-    <div class="cont">
-        Página de Jolly y Mateo
-    </div>
+<!-- PANEL PRINCIPAL -->
+<div id="panel" class="fade">
+    <h1>Inventario del Día</h1>
+    <div id="hora"></div>
+    <div id="fecha"></div>
 
-    <footer>Página de Jolly y Mateo</footer>
+    <textarea id="actividad" placeholder="¿Qué harás hoy?"></textarea>
+    <button onclick="guardarActividad()">Guardar actividad</button>
+
+    <div id="lista"></div>
+</div>
+
+<script>
+    // Login
+    function login() {
+        const pass = document.getElementById("pass").value;
+        const error = document.getElementById("error");
+        if (pass === "jolly") {
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("panel").style.display = "block";
+        } else {
+            error.textContent = "Contraseña incorrecta.";
+        }
+    }
+
+    // Reloj en vivo
+    function actualizarHora() {
+        const now = new Date();
+        document.getElementById("hora").textContent =
+            "Hora: " + now.toLocaleTimeString();
+
+        document.getElementById("fecha").textContent =
+            "Fecha: " + now.toLocaleDateString();
+    }
+    setInterval(actualizarHora, 1000);
+    actualizarHora();
+
+    // Guardar actividades
+    function guardarActividad() {
+        const texto = document.getElementById("actividad").value;
+        if (texto.trim() === "") return;
+
+        const item = document.createElement("div");
+        item.className = "itemBox";
+        item.textContent = texto;
+
+        document.getElementById("lista").appendChild(item);
+        document.getElementById("actividad").value = "";
+    }
+</script>
 
 </body>
 </html>
