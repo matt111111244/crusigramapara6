@@ -157,11 +157,14 @@
         }
 
         const actividad = { texto, fecha, hora };
-
         actividades.push(actividad);
+
+        // Guardar solo las últimas 5 actividades
+        if (actividades.length > 5) actividades.shift();
+
         localStorage.setItem("actividadesJolly", JSON.stringify(actividades));
 
-        agregarActividadVisual(actividad);
+        actualizarLista();
         actualizarConsolidado();
 
         document.getElementById("actividad").value = "";
@@ -169,26 +172,27 @@
         document.getElementById("horaEntrega").value = "";
     }
 
-    function agregarActividadVisual(obj) {
-        const item = document.createElement("div");
-        item.className = "itemBox";
-
-        const icono = iconos[Math.floor(Math.random() * iconos.length)];
-
-        item.innerHTML = `
-            <div><span class="icono">${icono}</span> <b>${obj.texto}</b></div>
-            <div>📅 Fecha: ${obj.fecha}</div>
-            <div>⏰ Hora: ${obj.hora}</div>
-        `;
-
-        document.getElementById("lista").appendChild(item);
+    function actualizarLista() {
+        const listaDiv = document.getElementById("lista");
+        listaDiv.innerHTML = "";
+        actividades.forEach((obj, index) => {
+            const item = document.createElement("div");
+            item.className = "itemBox";
+            const icono = iconos[Math.floor(Math.random() * iconos.length)];
+            item.innerHTML = `
+                <div><span class="icono">${icono}</span> <b>${index + 2}. ${obj.texto}</b></div>
+                <div>📅 Fecha: ${obj.fecha}</div>
+                <div>⏰ Hora: ${obj.hora}</div>
+            `;
+            listaDiv.appendChild(item);
+        });
     }
 
     function cargarActividadesGuardadas() {
         const guardadas = localStorage.getItem("actividadesJolly");
         if (guardadas) {
             actividades = JSON.parse(guardadas);
-            actividades.forEach(a => agregarActividadVisual(a));
+            actualizarLista();
             actualizarConsolidado();
         }
     }
@@ -196,7 +200,7 @@
     function actualizarConsolidado() {
         let html = "<b>Consolidado:</b><br><br>";
         actividades.forEach((a, i) => {
-            html += `${i + 1}. ${a.texto}<br>
+            html += `${i + 2}. ${a.texto}<br>
                      ➤ Fecha: ${a.fecha}<br>
                      ➤ Hora: ${a.hora}<br><br>`;
         });
