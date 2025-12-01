@@ -159,8 +159,11 @@ function guardarActividad(casillaIndex) {
     const fecha = document.getElementById(`fechaEntrega${casilla.numero}`).value;
     const hora = document.getElementById(`horaEntrega${casilla.numero}`).value;
 
-    if(texto === "" || fecha === "" || hora === "") { alert("Completa actividad, fecha y hora."); return; }
-    if(casilla.actividades.length >= 2) { return; } // Límite 2 por casilla
+    if(texto === "" || fecha === "" || hora === "") { 
+        alert("Completa actividad, fecha y hora."); 
+        return; 
+    }
+    if(casilla.actividades.length >= 2) return;
 
     const icono = iconos[Math.floor(Math.random()*iconos.length)];
     casilla.actividades.push({ texto, fecha, hora, icono });
@@ -169,12 +172,10 @@ function guardarActividad(casillaIndex) {
 
     renderCasillas();
 
-    // Limpiar inputs
     document.getElementById(`actividad${casilla.numero}`).value = "";
     document.getElementById(`fechaEntrega${casilla.numero}`).value = "";
     document.getElementById(`horaEntrega${casilla.numero}`).value = "";
 
-    // Si la casilla se llenó, crear una nueva automáticamente
     if(casilla.actividades.length === 2) crearNuevaCasilla();
 }
 
@@ -196,7 +197,6 @@ function renderCasillas() {
         `;
         container.appendChild(div);
 
-        // Renderizar actividades guardadas
         const listaDiv = document.getElementById(`lista${casilla.numero}`);
         listaDiv.innerHTML = "";
         casilla.actividades.forEach((act,i)=>{
@@ -209,13 +209,6 @@ function renderCasillas() {
             `;
             listaDiv.appendChild(item);
         });
-
-        // Si ya hay 2 actividades, desactivar inputs
-        if(casilla.actividades.length >= 2){
-            document.getElementById(`actividad${casilla.numero}`).disabled = true;
-            document.getElementById(`fechaEntrega${casilla.numero}`).disabled = true;
-            document.getElementById(`horaEntrega${casilla.numero}`).disabled = true;
-        }
     });
 }
 
