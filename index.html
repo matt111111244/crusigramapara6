@@ -17,7 +17,6 @@
         overflow: hidden;
     }
 
-    /* Animación suave */
     .fade { animation: fadeIn 0.6s ease forwards; opacity: 0; }
     @keyframes fadeIn { to { opacity: 1; } }
 
@@ -27,21 +26,15 @@
         to { transform: translateY(0); opacity: 1; }
     }
 
-    /* CUADROS */
     #loginBox, #panel {
         background: rgba(255,255,255,0.9);
         padding: 30px;
         border-radius: 15px;
         box-shadow: 0 0 25px rgba(0,0,0,0.1);
         width: 90%;
-        max-width: 380px;
+        max-width: 430px;
         text-align: center;
         backdrop-filter: blur(8px);
-        transition: 0.3s;
-    }
-
-    #loginBox:hover, #panel:hover {
-        transform: scale(1.02);
     }
 
     h1 {
@@ -50,7 +43,6 @@
         font-size: 26px;
     }
 
-    /* INPUTS */
     input, textarea {
         width: 95%;
         padding: 14px;
@@ -61,10 +53,8 @@
         transition: 0.25s;
     }
 
-    input:focus, textarea:focus { border-color: #c56bee; }
-
     button {
-        margin-top: 18px;
+        margin-top: 15px;
         width: 100%;
         padding: 14px;
         background: #c56bee;
@@ -77,10 +67,7 @@
         transition: 0.25s;
     }
 
-    button:hover { background: #ab55d6; transform: scale(1.03); }
-
-    /* PANEL */
-    #panel { display: none; max-width: 450px; }
+    #panel { display: none; max-width: 500px; }
 
     #hora, #fecha {
         font-size: 16px;
@@ -88,13 +75,8 @@
         color: #444;
     }
 
-    textarea {
-        height: 120px;
-        resize: none;
-        margin-top: 10px;
-    }
+    textarea { height: 120px; resize: none; }
 
-    /* ACTIVIDADES */
     .itemBox {
         background: #f8d9ff;
         padding: 12px;
@@ -102,21 +84,25 @@
         margin-top: 12px;
         text-align: left;
         color: #5a2d74;
-        font-weight: 500;
         display: flex;
         align-items: center;
         gap: 10px;
         animation: slideUp 0.5s ease;
     }
 
-    .icono {
-        font-size: 22px;
+    .icono { font-size: 22px; }
+
+    .consolidadoBox {
+        background: #ffe1fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        text-align: left;
+        color: #5a2d74;
+        font-size: 15px;
+        font-weight: 500;
     }
 
-    @media (max-width: 500px) {
-        #loginBox, #panel { max-width: 90%; }
-        h1 { font-size: 22px; }
-    }
 </style>
 </head>
 <body>
@@ -130,7 +116,7 @@
     <p id="error" style="color:red; margin-top:10px;"></p>
 </div>
 
-<!-- PANEL PRINCIPAL -->
+<!-- PANEL -->
 <div id="panel" class="fade">
     <h1>Inventario del Día</h1>
 
@@ -141,40 +127,51 @@
     <button onclick="guardarActividad()">Guardar actividad</button>
 
     <div id="lista"></div>
+
+    <div class="consolidadoBox" id="consolidado"></div>
+
+    <button onclick="exportarWord()">Descargar consolidado en Word</button>
 </div>
 
 <script>
     // LOGIN
     function login() {
         const pass = document.getElementById("pass").value;
-        const error = document.getElementById("error");
         if (pass === "jolly") {
             document.getElementById("loginBox").style.display = "none";
             document.getElementById("panel").style.display = "block";
+            cargarActividadesGuardadas();
         } else {
-            error.textContent = "Contraseña incorrecta.";
+            document.getElementById("error").textContent = "Contraseña incorrecta.";
         }
     }
 
     // RELOJ
     function actualizarHora() {
         const now = new Date();
-        document.getElementById("hora").textContent =
-            "Hora: " + now.toLocaleTimeString();
-        document.getElementById("fecha").textContent =
-            "Fecha: " + now.toLocaleDateString();
+        document.getElementById("hora").textContent = "Hora: " + now.toLocaleTimeString();
+        document.getElementById("fecha").textContent = "Fecha: " + now.toLocaleDateString();
     }
     setInterval(actualizarHora, 1000);
     actualizarHora();
 
-    // Iconos de inventario
     const iconos = ["💖", "⭐", "✔️"];
+    let actividades = [];
 
-    // GUARDAR ACTIVIDAD
     function guardarActividad() {
         const texto = document.getElementById("actividad").value;
         if (texto.trim() === "") return;
 
+        actividades.push(texto);
+        localStorage.setItem("actividadesJolly", JSON.stringify(actividades));
+
+        agregarActividadVisual(texto);
+        actualizarConsolidado();
+
+        document.getElementById("actividad").value = "";
+    }
+
+    function agregarActividadVisual(texto) {
         const item = document.createElement("div");
         item.className = "itemBox slide";
 
@@ -182,14 +179,47 @@
         icono.className = "icono";
         icono.textContent = iconos[Math.floor(Math.random() * iconos.length)];
 
-        const contenido = document.createElement("span");
-        contenido.textContent = texto;
+        const t = document.createElement("span");
+        t.textContent = texto;
 
         item.appendChild(icono);
-        item.appendChild(contenido);
+        item.appendChild(t);
 
         document.getElementById("lista").appendChild(item);
-        document.getElementById("actividad").value = "";
+    }
+
+    function cargarActividadesGuardadas() {
+        const guardadas = localStorage.getItem("actividadesJolly");
+        if (guardadas) {
+            actividades = JSON.parse(guardadas);
+            actividades.forEach(a => agregarActividadVisual(a));
+            actualizarConsolidado();
+        }
+    }
+
+    function actualizarConsolidado() {
+        let html = "<b>Consolidado del día:</b><br><br>";
+        actividades.forEach((a, i) => {
+            html += (i + 1) + ". " + a + "<br>";
+        });
+        document.getElementById("consolidado").innerHTML = html;
+    }
+
+    function exportarWord() {
+        const contenido = document.getElementById("consolidado").innerHTML;
+        const header = "<html><head><meta charset='UTF-8'></head><body>";
+        const footer = "</body></html>";
+
+        const blob = new Blob([header + contenido + footer], {
+            type: "application/msword"
+        });
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "Consolidado_Jolly.doc";
+        link.click();
+        URL.revokeObjectURL(url);
     }
 </script>
 
