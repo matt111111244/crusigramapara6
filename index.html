@@ -6,6 +6,8 @@
 <title>Página de Jolly</title>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
     body {
         margin: 0;
         font-family: "Poppins", sans-serif;
@@ -17,28 +19,37 @@
         padding: 10px;
     }
 
+    /* Animación máquina de escribir */
+    .typing {
+        display: inline-block;
+        border-right: 2px solid #ca4bc9;
+        white-space: nowrap;
+        overflow: hidden;
+        animation: typing 2s steps(15), blink 0.5s step-end infinite alternate;
+        font-size: 28px;
+        font-weight: bold;
+        color: #ca4bc9;
+        margin-bottom: 10px;
+    }
+
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink { 50% { border-color: transparent } }
+
     .fade { animation: fadeIn 0.6s ease forwards; opacity: 0; }
     @keyframes fadeIn { to { opacity: 1; } }
 
-    #loginBox, #panel {
+    #loginBox, .panel {
         background: #ffffffd9;
         padding: 35px;
         border-radius: 18px;
         width: 90%;
-        max-width: 460px;
-        box-shadow: 0 0 25px rgba(255, 140, 200, 0.2);
+        max-width: 500px;
+        box-shadow: 0 0 25px rgba(255, 140, 200, 0.3);
         backdrop-filter: blur(10px);
         text-align: center;
     }
 
-    h1 {
-        color: #ca4bc9;
-        font-size: 26px;
-        margin-bottom: 18px;
-        font-weight: bold;
-    }
-
-    input, textarea, select {
+    input, textarea, select, button {
         width: 100%;
         padding: 13px;
         margin-top: 10px;
@@ -56,24 +67,18 @@
 
     button {
         margin-top: 18px;
-        width: 100%;
-        padding: 14px;
         background: #ca4bc9;
         border: none;
         color: white;
         font-size: 17px;
         border-radius: 12px;
         cursor: pointer;
+        transition: 0.3s;
     }
 
-    button:hover {
-        background: #b63cb3;
-    }
+    button:hover { background: #b63cb3; }
 
-    textarea {
-        height: 110px;
-        resize: none;
-    }
+    textarea { height: 110px; resize: none; }
 
     .itemBox {
         background: #ffe9fa;
@@ -96,36 +101,58 @@
     }
 
     .icono { font-size: 20px; margin-right: 5px; }
+
+    .panel-section {
+        margin-top: 20px;
+    }
+
+    .section-title {
+        font-weight: 600;
+        color: #b63cb3;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="loginBox" class="fade">
-    <h1>Página de Jolly</h1>
+    <div class="typing">Página de Jolly</div>
     <p style="color:#444;">Inicia sesión</p>
-    <input id="pass" type="password" placeholder="Contraseña">
+    <input id="pass" type="password" placeholder="Contraseña" autocomplete="off">
     <button onclick="login()">Entrar</button>
     <p id="error" style="color:red; margin-top:10px;"></p>
 </div>
 
 <!-- PANEL -->
 <div id="panel" class="fade" style="display:none;">
-    <h1>Inventario del Día</h1>
 
-    <textarea id="actividad" placeholder="¿Qué actividad harás?"></textarea>
+    <!-- Sección de actividades 1 -->
+    <div class="panel panel-section" id="section1">
+        <div class="section-title">Actividades 1-2</div>
+        <textarea id="actividad1" placeholder="¿Qué actividad harás?"></textarea>
+        <label>Fecha de entrega:</label>
+        <input type="date" id="fechaEntrega1">
+        <label>Hora de entrega:</label>
+        <input type="time" id="horaEntrega1">
+        <button onclick="guardarActividad(1)">Guardar actividad</button>
+        <div id="lista1"></div>
+        <div class="consolidadoBox" id="consolidado1"></div>
+    </div>
 
-    <label style="margin-top:10px; font-size:14px; color:#663a75; display:block;">Fecha de entrega:</label>
-    <input type="date" id="fechaEntrega">
-
-    <label style="margin-top:10px; font-size:14px; color:#663a75; display:block;">Hora de entrega:</label>
-    <input type="time" id="horaEntrega">
-
-    <button onclick="guardarActividad()">Guardar actividad</button>
-
-    <div id="lista"></div>
-
-    <div class="consolidadoBox" id="consolidado"></div>
+    <!-- Sección de actividades 2 -->
+    <div class="panel panel-section" id="section2" style="display:none;">
+        <div class="section-title">Actividades 3-4</div>
+        <textarea id="actividad2" placeholder="¿Qué actividad harás?"></textarea>
+        <label>Fecha de entrega:</label>
+        <input type="date" id="fechaEntrega2">
+        <label>Hora de entrega:</label>
+        <input type="time" id="horaEntrega2">
+        <button onclick="guardarActividad(2)">Guardar actividad</button>
+        <div id="lista2"></div>
+        <div class="consolidadoBox" id="consolidado2"></div>
+    </div>
 
     <button onclick="exportarWord()">Descargar Word</button>
 </div>
@@ -134,7 +161,7 @@
     // LOGIN
     function login() {
         const pass = document.getElementById("pass").value;
-        if (pass === "jolly") {
+        if(pass === "jolly") {
             document.getElementById("loginBox").style.display = "none";
             document.getElementById("panel").style.display = "block";
             cargarActividadesGuardadas();
@@ -144,43 +171,61 @@
     }
 
     const iconos = ["💖", "✨", "🌸", "💕"];
-    let actividades = [];
+    let actividades1 = [];
+    let actividades2 = [];
 
-    function guardarActividad() {
-        const texto = document.getElementById("actividad").value.trim();
-        const fecha = document.getElementById("fechaEntrega").value;
-        const hora = document.getElementById("horaEntrega").value;
+    function guardarActividad(seccion) {
+        let texto, fecha, hora, listaDiv, consolidadoDiv, arr;
 
-        if (texto === "" || fecha === "" || hora === "") {
-            alert("Completa actividad, fecha y hora.");
-            return;
+        if(seccion === 1) {
+            texto = document.getElementById("actividad1").value.trim();
+            fecha = document.getElementById("fechaEntrega1").value;
+            hora = document.getElementById("horaEntrega1").value;
+            listaDiv = document.getElementById("lista1");
+            consolidadoDiv = document.getElementById("consolidado1");
+            arr = actividades1;
+        } else {
+            texto = document.getElementById("actividad2").value.trim();
+            fecha = document.getElementById("fechaEntrega2").value;
+            hora = document.getElementById("horaEntrega2").value;
+            listaDiv = document.getElementById("lista2");
+            consolidadoDiv = document.getElementById("consolidado2");
+            arr = actividades2;
         }
 
-        const actividad = { texto, fecha, hora };
-        actividades.push(actividad);
+        if(texto === "" || fecha === "" || hora === "") { alert("Completa actividad, fecha y hora."); return; }
+        if(arr.length >= 2) { alert("Ya alcanzaste el límite de 2 actividades en esta sección."); return; }
 
-        // Guardar solo las últimas 5 actividades
-        if (actividades.length > 5) actividades.shift();
+        const icono = iconos[Math.floor(Math.random() * iconos.length)];
+        arr.push({ texto, fecha, hora, icono });
 
-        localStorage.setItem("actividadesJolly", JSON.stringify(actividades));
+        // Guardar en localStorage
+        localStorage.setItem("actividades1", JSON.stringify(actividades1));
+        localStorage.setItem("actividades2", JSON.stringify(actividades2));
 
-        actualizarLista();
-        actualizarConsolidado();
+        actualizarLista(arr, listaDiv);
+        actualizarConsolidado(arr, consolidadoDiv);
 
-        document.getElementById("actividad").value = "";
-        document.getElementById("fechaEntrega").value = "";
-        document.getElementById("horaEntrega").value = "";
+        // Limpiar inputs
+        if(seccion === 1) {
+            document.getElementById("actividad1").value = "";
+            document.getElementById("fechaEntrega1").value = "";
+            document.getElementById("horaEntrega1").value = "";
+            if(actividades1.length === 2) document.getElementById("section2").style.display = "block";
+        } else {
+            document.getElementById("actividad2").value = "";
+            document.getElementById("fechaEntrega2").value = "";
+            document.getElementById("horaEntrega2").value = "";
+        }
     }
 
-    function actualizarLista() {
-        const listaDiv = document.getElementById("lista");
+    function actualizarLista(arr, listaDiv) {
         listaDiv.innerHTML = "";
-        actividades.forEach((obj, index) => {
+        arr.forEach((obj, index) => {
             const item = document.createElement("div");
             item.className = "itemBox";
-            const icono = iconos[Math.floor(Math.random() * iconos.length)];
             item.innerHTML = `
-                <div><span class="icono">${icono}</span> <b>${index + 2}. ${obj.texto}</b></div>
+                <div><span class="icono">${obj.icono}</span> <b>${index + 1}. ${obj.texto}</b></div>
                 <div>📅 Fecha: ${obj.fecha}</div>
                 <div>⏰ Hora: ${obj.hora}</div>
             `;
@@ -188,32 +233,35 @@
         });
     }
 
+    function actualizarConsolidado(arr, consolidadoDiv) {
+        let html = "<b>Consolidado:</b><br><br>";
+        arr.forEach((a,i)=>{
+            html += `${i+1}. ${a.texto}<br>➤ Fecha: ${a.fecha}<br>➤ Hora: ${a.hora}<br><br>`;
+        });
+        consolidadoDiv.innerHTML = html;
+    }
+
     function cargarActividadesGuardadas() {
-        const guardadas = localStorage.getItem("actividadesJolly");
-        if (guardadas) {
-            actividades = JSON.parse(guardadas);
-            actualizarLista();
-            actualizarConsolidado();
+        const guardadas1 = localStorage.getItem("actividades1");
+        const guardadas2 = localStorage.getItem("actividades2");
+
+        if(guardadas1) {
+            actividades1 = JSON.parse(guardadas1);
+            actualizarLista(actividades1, document.getElementById("lista1"));
+            actualizarConsolidado(actividades1, document.getElementById("consolidado1"));
+            if(actividades1.length === 2) document.getElementById("section2").style.display = "block";
+        }
+        if(guardadas2) {
+            actividades2 = JSON.parse(guardadas2);
+            actualizarLista(actividades2, document.getElementById("lista2"));
+            actualizarConsolidado(actividades2, document.getElementById("consolidado2"));
         }
     }
 
-    function actualizarConsolidado() {
-        let html = "<b>Consolidado:</b><br><br>";
-        actividades.forEach((a, i) => {
-            html += `${i + 2}. ${a.texto}<br>
-                     ➤ Fecha: ${a.fecha}<br>
-                     ➤ Hora: ${a.hora}<br><br>`;
-        });
-        document.getElementById("consolidado").innerHTML = html;
-    }
-
     function exportarWord() {
-        const contenido = document.getElementById("consolidado").innerHTML;
-        const blob = new Blob(
-            ["<html><head><meta charset='UTF-8'></head><body>" + contenido + "</body></html>"],
-            { type: "application/msword" }
-        );
-
+        const contenido = document.getElementById("consolidado1").innerHTML + "<br>" + document.getElementById("consolidado2").innerHTML;
+        const estilo = "<style>body { font-family: Poppins, sans-serif; color: #663a75; }</style>";
+        const blob = new Blob(["<html><head><meta charset='UTF-8'>" + estilo + "</head><body>" + contenido + "</body></html>"], {type: "application/msword"});
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
@@ -222,6 +270,5 @@
         URL.revokeObjectURL(url);
     }
 </script>
-
 </body>
 </html>
