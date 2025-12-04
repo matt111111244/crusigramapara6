@@ -20,6 +20,20 @@ body {
     padding: 15px;
 }
 
+/* Para pantallas pequeñas */
+@media (max-width: 480px) {
+    #loginBox, #panel {
+        padding: 22px !important;
+        width: 100% !important;
+    }
+    .typing {
+        font-size: 24px !important;
+    }
+    textarea {
+        height: 90px;
+    }
+}
+
 /* Título animado */
 .typing {
     display: inline-block;
@@ -35,7 +49,6 @@ body {
 @keyframes typing { from { width: 0 } to { width: 100% } }
 @keyframes blink { 50% { border-color: transparent } }
 
-/* Tarjetas principales */
 #loginBox, #panel {
     width: 95%;
     max-width: 520px;
@@ -135,9 +148,27 @@ button:hover { background: #bb45bb; }
     font-size: 20px;
     margin-right: 5px;
 }
+
+/* BLOQUEO MENSAJE */
+#blockedMessage {
+    display: none;
+    text-align: center;
+    padding: 30px;
+    background: #fff0f6;
+    border-radius: 18px;
+    font-size: 20px;
+    color: #b30057;
+    box-shadow: 0 0 20px rgba(255, 0, 100, 0.2);
+}
 </style>
 </head>
 <body>
+
+<!-- BLOQUEO PARA GALAXY A30s -->
+<div id="blockedMessage">
+    🚫 <b>Acceso no permitido</b><br><br>
+    Este dispositivo no está autorizado para entrar a esta página.
+</div>
 
 <!-- LOGIN -->
 <div id="loginBox">
@@ -155,10 +186,18 @@ button:hover { background: #bb45bb; }
 </div>
 
 <script>
+/* BLOQUEAR GALAXY A30S */
+const ua = navigator.userAgent.toLowerCase();
+if (ua.includes("sm-a307") || ua.includes("a30s")) {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("panel").style.display = "none";
+    document.getElementById("blockedMessage").style.display = "block";
+}
+
+/* SISTEMA ORIGINAL */
 const iconos = ["💖", "✨", "🌸", "💕"];
 let casillas = [];
 
-/* LOGIN */
 function login() {
     const pass = document.getElementById("pass").value;
     if(pass === "jolly") {
@@ -171,14 +210,12 @@ function login() {
     }
 }
 
-/* NUEVA CASILLA */
 function crearNuevaCasilla() {
     const numero = casillas.length + 1;
     casillas.push({ numero, actividades: [] });
     renderCasillas();
 }
 
-/* GUARDAR ACTIVIDAD */
 function guardarActividad(index) {
     const casilla = casillas[index];
     const texto = document.getElementById(`actividad${casilla.numero}`).value.trim();
@@ -206,7 +243,6 @@ function guardarActividad(index) {
     if(casilla.actividades.length === 2) crearNuevaCasilla();
 }
 
-/* EDITAR */
 function editarActividad(casIndex, actIndex) {
     const nueva = prompt("Editar actividad:", casillas[casIndex].actividades[actIndex].texto);
     if(nueva && nueva.trim() !== "") {
@@ -216,7 +252,6 @@ function editarActividad(casIndex, actIndex) {
     }
 }
 
-/* ELIMINAR */
 function borrarActividad(casIndex, actIndex) {
     if(!confirm("¿Seguro que deseas borrar esta actividad?")) return;
     casillas[casIndex].actividades.splice(actIndex, 1);
@@ -224,7 +259,6 @@ function borrarActividad(casIndex, actIndex) {
     renderCasillas();
 }
 
-/* RENDER */
 function renderCasillas() {
     const container = document.getElementById("casillasContainer");
     container.innerHTML = "";
@@ -261,7 +295,6 @@ function renderCasillas() {
     });
 }
 
-/* LOCAL STORAGE */
 function guardarLocal() { localStorage.setItem("casillasJolly", JSON.stringify(casillas)); }
 function cargarCasillas() {
     const guardadas = localStorage.getItem("casillasJolly");
@@ -269,7 +302,6 @@ function cargarCasillas() {
     renderCasillas();
 }
 
-/* EXPORTAR */
 function exportarWord() {
     let contenido = "";
     casillas.forEach(c=>{
