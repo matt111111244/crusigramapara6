@@ -6,145 +6,152 @@
 <title>Página de Jolly</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
 
 body {
     margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(135deg, #ffe6f4, #f9dfff);
+    font-family: "Montserrat", sans-serif;
+    background: linear-gradient(145deg, #ffe1f0, #f5d6ff, #ffe8ff);
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    padding: 10px;
     flex-direction: column;
+    padding: 15px;
 }
 
+/* Título animado */
 .typing {
     display: inline-block;
-    border-right: 2px solid #ca4bc9;
+    border-right: 3px solid #d46bd4;
     white-space: nowrap;
     overflow: hidden;
-    animation: typing 2s steps(15), blink 0.5s step-end infinite alternate;
-    font-size: 28px;
-    font-weight: bold;
-    color: #ca4bc9;
-    margin-bottom: 20px;
+    animation: typing 2s steps(20), blink 0.6s step-end infinite alternate;
+    font-size: 30px;
+    font-weight: 700;
+    color: #b74db6;
+    margin-bottom: 15px;
 }
-
 @keyframes typing { from { width: 0 } to { width: 100% } }
 @keyframes blink { 50% { border-color: transparent } }
 
-.fade { animation: fadeIn 0.6s ease forwards; opacity: 0; }
-@keyframes fadeIn { to { opacity: 1; } }
-
+/* Tarjetas principales */
 #loginBox, #panel {
-    background: #ffffffd9;
-    padding: 35px;
+    width: 95%;
+    max-width: 520px;
+    background: rgba(255,255,255,0.75);
     border-radius: 18px;
-    width: 90%;
-    max-width: 550px;
-    box-shadow: 0 0 25px rgba(255, 140, 200, 0.3);
-    backdrop-filter: blur(10px);
-    text-align: center;
+    padding: 35px;
+    box-shadow: 0 8px 30px rgba(255, 140, 200, 0.25);
+    backdrop-filter: blur(12px);
+    animation: fadeIn 0.6s ease forwards;
+    opacity: 0;
 }
+
+@keyframes fadeIn { to { opacity: 1; } }
 
 /* Inputs */
 input, textarea, button {
     width: 100%;
     padding: 13px;
-    margin-top: 10px;
-    border-radius: 12px;
-    border: 2px solid #f3b8ff;
+    border-radius: 14px;
+    border: 2px solid #e8b8ff;
     outline: none;
     font-size: 15px;
     background: #fff;
     transition: 0.25s;
 }
-
 input:focus, textarea:focus {
-    border-color: #ca4bc9;
+    border-color: #d46bd4;
+    box-shadow: 0 0 5px rgba(212,107,212,0.3);
 }
 
+/* Botones */
 button {
-    margin-top: 18px;
-    background: #ca4bc9;
-    border: none;
+    background: #d46bd4;
     color: white;
+    border: none;
+    margin-top: 18px;
     font-size: 17px;
-    border-radius: 12px;
+    font-weight: 600;
     cursor: pointer;
+    border-radius: 14px;
     transition: 0.3s;
 }
+button:hover { background: #bb45bb; }
 
-button:hover { background: #b63cb3; }
-
-textarea { height: 110px; resize: none; }
-
-/* Animaciones suaves */
-.itemBox {
-    background: #ffe9fa;
-    padding: 14px;
-    border-radius: 12px;
-    text-align: left;
-    margin-top: 12px;
-    color: #663a75;
-    animation: slideFade 0.4s ease;
+/* Casillas */
+.casilla {
+    background: #fff5fa;
+    padding: 20px;
+    border-radius: 16px;
+    margin-top: 20px;
+    border-left: 6px solid #d46bd4;
+    box-shadow: 0 4px 14px rgba(220,120,200, 0.15);
+    animation: softSlide 0.4s ease;
 }
-
-@keyframes slideFade {
-    from { opacity: 0; transform: translateY(8px); }
+@keyframes softSlide {
+    from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.casilla {
-    border: 2px solid #f3b8ff;
-    border-radius: 14px;
-    padding: 15px;
-    margin-top: 20px;
-    background: #fff0f8;
+.casilla-title {
+    font-weight: 700;
+    font-size: 19px;
+    color: #b74db6;
+    margin-bottom: 12px;
 }
 
-.casilla-title { 
-    font-weight: 600; 
-    color: #b63cb3; 
-    margin-bottom: 10px; 
-    font-size: 18px; 
+/* Item actividad */
+.itemBox {
+    background: #ffeef9;
+    padding: 12px;
+    border-radius: 12px;
+    margin-top: 12px;
+    border: 1px solid #f5c6ea;
+    color: #5e3c63;
 }
 
-.icono { font-size: 20px; margin-right: 5px; }
-
+/* Botones pequeños */
 .control-btn {
-    display: inline-block;
+    background: #d46bd4;
     padding: 6px 10px;
-    margin-top: 6px;
-    background: #ca4bc9;
-    color: white;
     font-size: 13px;
     border-radius: 8px;
+    margin-right: 5px;
+    color: white;
     cursor: pointer;
 }
-.control-btn:hover { background: #b63cb3; }
+.control-btn:hover { background: #bb45bb; }
 
-.delete-btn { background: #ff639b; }
-.delete-btn:hover { background: #e65187; }
+.delete-btn {
+    background: #ff6c9d;
+}
+.delete-btn:hover {
+    background: #ee578b;
+}
+
+.icono {
+    font-size: 20px;
+    margin-right: 5px;
+}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="loginBox" class="fade">
-    <div class="typing">Página de Jolly</div>
-    <p style="color:#444;">Inicia sesión</p>
+<div id="loginBox">
+    <div class="typing">Página de Jolly ✨</div>
+    <p style="color:#555;">Inicia sesión para entrar</p>
     <input id="pass" type="password" placeholder="Contraseña" autocomplete="off">
     <button onclick="login()">Entrar</button>
     <p id="error" style="color:red; margin-top:10px;"></p>
 </div>
 
 <!-- PANEL -->
-<div id="panel" class="fade" style="display:none;">
+<div id="panel" style="display:none;">
     <div id="casillasContainer"></div>
-    <button style="margin-top:25px;" onclick="exportarWord()">Descargar Word</button>
+    <button onclick="exportarWord()" style="margin-top: 25px;">Descargar Word</button>
 </div>
 
 <script>
@@ -167,26 +174,27 @@ function login() {
 /* NUEVA CASILLA */
 function crearNuevaCasilla() {
     const numero = casillas.length + 1;
-    const casilla = { numero, actividades: [] };
-    casillas.push(casilla);
+    casillas.push({ numero, actividades: [] });
     renderCasillas();
 }
 
 /* GUARDAR ACTIVIDAD */
-function guardarActividad(casillaIndex) {
-    const casilla = casillas[casillaIndex];
+function guardarActividad(index) {
+    const casilla = casillas[index];
     const texto = document.getElementById(`actividad${casilla.numero}`).value.trim();
     const fecha = document.getElementById(`fechaEntrega${casilla.numero}`).value;
     const hora = document.getElementById(`horaEntrega${casilla.numero}`).value;
 
-    if(texto === "" || fecha === "" || hora === "") { 
-        alert("Completa actividad, fecha y hora."); 
-        return; 
-    }
+    if(texto === "" || fecha === "" || hora === "") return alert("Completa toda la información.");
+
     if(casilla.actividades.length >= 2) return;
 
-    const icono = iconos[Math.floor(Math.random()*iconos.length)];
-    casilla.actividades.push({ texto, fecha, hora, icono });
+    casilla.actividades.push({
+        texto,
+        fecha,
+        hora,
+        icono: iconos[Math.floor(Math.random()*iconos.length)]
+    });
 
     guardarLocal();
     renderCasillas();
@@ -199,18 +207,19 @@ function guardarActividad(casillaIndex) {
 }
 
 /* EDITAR */
-function editarActividad(casillaIndex, actIndex) {
-    const nueva = prompt("Edita la actividad:", casillas[casillaIndex].actividades[actIndex].texto);
+function editarActividad(casIndex, actIndex) {
+    const nueva = prompt("Editar actividad:", casillas[casIndex].actividades[actIndex].texto);
     if(nueva && nueva.trim() !== "") {
-        casillas[casillaIndex].actividades[actIndex].texto = nueva.trim();
+        casillas[casIndex].actividades[actIndex].texto = nueva.trim();
         guardarLocal();
         renderCasillas();
     }
 }
 
 /* ELIMINAR */
-function borrarActividad(casillaIndex, actIndex) {
-    casillas[casillaIndex].actividades.splice(actIndex, 1);
+function borrarActividad(casIndex, actIndex) {
+    if(!confirm("¿Seguro que deseas borrar esta actividad?")) return;
+    casillas[casIndex].actividades.splice(actIndex, 1);
     guardarLocal();
     renderCasillas();
 }
@@ -220,53 +229,47 @@ function renderCasillas() {
     const container = document.getElementById("casillasContainer");
     container.innerHTML = "";
 
-    casillas.forEach((casilla, index)=>{
+    casillas.forEach((casilla, i)=>{
         const div = document.createElement("div");
         div.className = "casilla";
         div.innerHTML = `
             <div class="casilla-title">Casilla ${casilla.numero}</div>
             <textarea id="actividad${casilla.numero}" placeholder="¿Qué actividad harás?"></textarea>
-            <label>Fecha de entrega:</label>
+            <label>Fecha:</label>
             <input type="date" id="fechaEntrega${casilla.numero}">
-            <label>Hora de entrega:</label>
+            <label>Hora:</label>
             <input type="time" id="horaEntrega${casilla.numero}">
-            <button onclick="guardarActividad(${index})">Guardar actividad</button>
+            <button onclick="guardarActividad(${i})">Guardar actividad</button>
             <div id="lista${casilla.numero}"></div>
         `;
         container.appendChild(div);
 
         const listaDiv = document.getElementById(`lista${casilla.numero}`);
-        listaDiv.innerHTML = "";
-        casilla.actividades.forEach((act,i)=>{
-            const item = document.createElement("div");
-            item.className = "itemBox";
-            item.innerHTML = `
-                <div><span class="icono">${act.icono}</span> <b>${i+1}. ${act.texto}</b></div>
-                <div>📅 Fecha: ${act.fecha}</div>
-                <div>⏰ Hora: ${act.hora}</div>
-
-                <div style="margin-top:8px;">
-                    <span class="control-btn" onclick="editarActividad(${index}, ${i})">Editar</span>
-                    <span class="control-btn delete-btn" onclick="borrarActividad(${index}, ${i})">Eliminar</span>
+        casilla.actividades.forEach((act,j)=>{
+            listaDiv.innerHTML += `
+                <div class="itemBox">
+                    <div><span class="icono">${act.icono}</span><b>${j+1}. ${act.texto}</b></div>
+                    <div>📅 ${act.fecha}</div>
+                    <div>⏰ ${act.hora}</div>
+                    <div style="margin-top:7px;">
+                        <span class="control-btn" onclick="editarActividad(${i},${j})">Editar</span>
+                        <span class="control-btn delete-btn" onclick="borrarActividad(${i},${j})">Eliminar</span>
+                    </div>
                 </div>
             `;
-            listaDiv.appendChild(item);
         });
     });
 }
 
-/* LOCALSTORAGE */
-function guardarLocal() {
-    localStorage.setItem("casillasJolly", JSON.stringify(casillas));
-}
-
+/* LOCAL STORAGE */
+function guardarLocal() { localStorage.setItem("casillasJolly", JSON.stringify(casillas)); }
 function cargarCasillas() {
     const guardadas = localStorage.getItem("casillasJolly");
     if(guardadas) casillas = JSON.parse(guardadas);
     renderCasillas();
 }
 
-/* EXPORTAR WORD */
+/* EXPORTAR */
 function exportarWord() {
     let contenido = "";
     casillas.forEach(c=>{
@@ -275,7 +278,7 @@ function exportarWord() {
             contenido += `${i+1}. ${a.texto}<br>➤ Fecha: ${a.fecha}<br>➤ Hora: ${a.hora}<br><br>`;
         });
     });
-    const estilo = "<style>body { font-family: Poppins, sans-serif; color: #663a75; }</style>";
+    const estilo = "<style>body{ font-family:Montserrat,sans-serif; color:#663a75; }</style>";
     const blob = new Blob(["<html><head><meta charset='UTF-8'>" + estilo + "</head><body>" + contenido + "</body></html>"], {type:"application/msword"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -285,5 +288,6 @@ function exportarWord() {
     URL.revokeObjectURL(url);
 }
 </script>
+
 </body>
 </html>
