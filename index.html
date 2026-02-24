@@ -1,338 +1,159 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Página de Jolly</title>
+    <meta charset="UTF-8">
+    <title>Cuestionario</title>
+    <style>
+        /* Estilo "hacker" sobrio mejorado */
+        body {
+            background-color: #0e0e0e;
+            color: #c0c0c0;
+            font-family: "Courier New", monospace;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* queremos controlar splash */
+        }
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
+        /* splash/login gif */
+        #splash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease;
+        }
+        #splash.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #splash img {
+            max-width: 300px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
 
-body {
-    margin: 0;
-    font-family: "Montserrat", sans-serif;
-    background: linear-gradient(145deg, #ffe1f0, #f5d6ff, #ffe8ff);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 15px;
-}
-
-/* Responsive */
-@media (max-width: 480px) {
-    #loginBox, #panel {
-        padding: 22px !important;
-        width: 100% !important;
-    }
-    .typing {
-        font-size: 24px !important;
-    }
-    textarea {
-        height: 90px;
-    }
-}
-
-/* Título */
-.typing {
-    display: inline-block;
-    border-right: 3px solid #d46bd4;
-    white-space: nowrap;
-    overflow: hidden;
-    animation: typing 2s steps(20), blink .6s step-end infinite alternate;
-    font-size: 30px;
-    font-weight: 700;
-    color: #b74db6;
-    margin-bottom: 15px;
-}
-
-@keyframes typing { from { width: 0 } to { width: 100% } }
-@keyframes blink { 50% { border-color: transparent } }
-
-#loginBox, #panel {
-    width: 95%;
-    max-width: 520px;
-    background: rgba(255,255,255,0.75);
-    border-radius: 18px;
-    padding: 35px;
-    box-shadow: 0 8px 30px rgba(255, 140, 200, 0.25);
-    backdrop-filter: blur(12px);
-    animation: fadeIn 0.6s ease forwards;
-    opacity: 0;
-}
-
-@keyframes fadeIn { to { opacity: 1; } }
-
-/* Inputs */
-input, textarea, button {
-    width: 100%;
-    padding: 13px;
-    border-radius: 14px;
-    border: 2px solid #e8b8ff;
-    outline: none;
-    font-size: 15px;
-    background: #fff;
-    transition: .25s;
-}
-input:focus, textarea:focus {
-    border-color: #d46bd4;
-    box-shadow: 0 0 5px rgba(212,107,212,0.3);
-}
-
-button {
-    background: #d46bd4;
-    color: white;
-    border: none;
-    margin-top: 18px;
-    font-size: 17px;
-    font-weight: 600;
-    cursor: pointer;
-    border-radius: 14px;
-    transition: .3s;
-}
-button:hover { background: #bb45bb; }
-
-/* Casillas */
-.casilla {
-    background: #fff5fa;
-    padding: 20px;
-    border-radius: 16px;
-    margin-top: 20px;
-    border-left: 6px solid #d46bd4;
-    box-shadow: 0 4px 14px rgba(220,120,200, 0.15);
-    animation: softSlide 0.4s ease;
-}
-
-@keyframes softSlide {
-    from { opacity: 0; transform: translateY(10px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-.casilla-title {
-    font-weight: 700;
-    font-size: 19px;
-    color: #b74db6;
-    margin-bottom: 12px;
-}
-
-/* Items */
-.itemBox {
-    background: #ffeef9;
-    padding: 12px;
-    border-radius: 12px;
-    margin-top: 12px;
-    border: 1px solid #f5c6ea;
-    color: #5e3c63;
-}
-
-.control-btn {
-    background: #d46bd4;
-    padding: 6px 10px;
-    font-size: 13px;
-    border-radius: 8px;
-    margin-right: 5px;
-    color: white;
-    cursor: pointer;
-}
-.control-btn:hover { background: #bb45bb; }
-
-.delete-btn {
-    background: #ff6c9d;
-}
-.delete-btn:hover { background: #ee578b; }
-
-.icono {
-    font-size: 20px;
-    margin-right: 5px;
-}
-
-/* Mensaje de bloqueo */
-#blockedMessage {
-    display: none;
-    text-align: center;
-    padding: 40px;
-    background: #fff0f6;
-    border-radius: 18px;
-    font-size: 20px;
-    color: #b30057;
-    box-shadow: 0 0 25px rgba(255, 0, 120, 0.2);
-    max-width: 500px;
-}
-</style>
+        .container {
+            max-width: 800px;
+            padding: 2rem;
+            background-color: #1a1a1a;
+            box-shadow: 0 0 20px #000;
+            border: 1px solid #333;
+            margin: auto;
+            position: relative;
+            top: 50px;
+        }
+        h1, h2 {
+            color: #8aff8a;
+            text-align: center;
+            text-shadow: 0 0 5px #8aff8a;
+        }
+        .pregunta {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin: .25rem 0;
+            cursor: pointer;
+        }
+        input[type="radio"] {
+            margin-right: .5rem;
+        }
+        button {
+            display: block;
+            margin: 2rem auto 0;
+            padding: .75rem 2rem;
+            background: transparent;
+            border: 1px solid #8aff8a;
+            color: #8aff8a;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background .2s, transform .2s;
+        }
+        button:hover {
+            background: rgba(138, 255, 138, .1);
+            transform: scale(1.05);
+        }
+        #resultado {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 <body>
-
-<!-- BLOQUEAR TODO MENOS iPHONE -->
-<script>
-const ua = navigator.userAgent.toLowerCase();
-const esIphone = /iphone|ipad|ipod/.test(ua);
-
-if (!esIphone) {
-    document.body.innerHTML = `
-        <div id="blockedMessage">
-            🚫 <b>Acceso no permitido</b><br><br>
-            Esta página solo está permitida para <b>iPhone</b>.
-        </div>
-    `;
-}
-</script>
-
-<!-- LOGIN -->
-<div id="loginBox">
-    <div class="typing">Página de Jolly ✨</div>
-    <p style="color:#555;">Inicia sesión para entrar</p>
-    <input id="pass" type="password" placeholder="Contraseña" autocomplete="off">
-    <button onclick="login()">Entrar</button>
-    <p id="error" style="color:red; margin-top:10px;"></p>
+<div id="splash">
+    <!-- reemplaza el src con la ruta de tu gif de login -->
+    <img src="assets/login.gif" alt="Cargando ..." />
 </div>
-
-<!-- PANEL -->
-<div id="panel" style="display:none;">
-    <div id="casillasContainer"></div>
-    <button onclick="exportarWord()" style="margin-top: 25px;">Descargar Word</button>
+<div class="container">
+    <h1>Cuestionario</h1>
+    <form id="quiz">
+        <!-- Se generan las preguntas con JavaScript -->
+    </form>
+    <button id="calcular">Calcular nota</button>
+    <div id="resultado"></div>
 </div>
-
 <script>
-const iconos = ["💖", "✨", "🌸", "💕"];
-let casillas = [];
+    const preguntas = [
+        {texto: "¿Qué significa emprender?", opciones: ["Copiar ideas de otros", "Iniciar un proyecto propio", "Evitar riesgos", "Trabajar solo"], correcta: 1},
+        {texto: "¿Cuál de estas cualidades es importante en un emprendedor?", opciones: ["Creatividad", "Pereza", "Desinterés", "Conformismo"], correcta: 0},
+        {texto: "¿Qué es el trabajo en equipo?", opciones: ["Hacer tareas sin ayuda", "Colaborar con otros para lograr un objetivo común", "Competir entre compañeros", "Ignorar las ideas de los demás"], correcta: 1},
+        {texto: "¿Cuál es una ventaja de trabajar en equipo?", opciones: ["Más ideas y soluciones", "Menos comunicación", "Más conflictos", "Menos responsabilidad"], correcta: 0},
+        {texto: "¿Qué significa “liderazgo” en un equipo?", opciones: ["Dar órdenes sin escuchar", "Guiar y motivar al grupo", "Trabajar solo", "Evitar responsabilidades"], correcta: 1},
+        {texto: "¿Qué valor es esencial para el trabajo en equipo?", opciones: ["Respeto", "Egoísmo", "Desconfianza", "Desinterés"], correcta: 0},
+        {texto: "¿Cuál de estas frases describe mejor la innovación?", opciones: ["Repetir lo mismo siempre", "Crear nuevas ideas o mejorar las existentes", "Evitar cambios", "Copiar sin modificar"], correcta: 1},
+        {texto: "¿Qué es un plan de negocios?", opciones: ["Un documento que organiza ideas y estrategias de un proyecto", "Una lista de compras", "Un horario escolar", "Un contrato de trabajo"], correcta: 0},
+        {texto: "¿Qué actitud ayuda más en un equipo?", opciones: ["Escuchar y aportar ideas", "Criticar sin proponer soluciones", "Ignorar las opiniones", "Trabajar sin comunicar"], correcta: 0},
+        {texto: "¿Qué significa “empatía” en el trabajo en equipo?", opciones: ["Ponerse en el lugar del otro", "Ignorar sentimientos", "Competir siempre", "Pensar solo en uno mismo"], correcta: 0},
+        {texto: "¿Cuál es un ejemplo de emprendimiento escolar?", opciones: ["Crear una feria de ciencias con proyectos propios", "Copiar tareas de otros", "Evitar participar en actividades", "No compartir ideas"], correcta: 0},
+        {texto: "¿Qué recurso es más importante para un emprendedor?", opciones: ["La creatividad y la perseverancia", "La pereza", "La desorganización", "La falta de comunicación"], correcta: 0},
+        {texto: "¿Qué significa “colaboración”?", opciones: ["Trabajar juntos para lograr un objetivo", "Evitar responsabilidades", "Criticar sin ayudar", "Trabajar en silencio"], correcta: 0},
+        {texto: "¿Qué puede causar problemas en un equipo?", opciones: ["Falta de comunicación", "Respeto mutuo", "Escuchar ideas", "Organización"], correcta: 0},
+        {texto: "¿Cuál es el primer paso para emprender un proyecto?", opciones: ["Identificar una idea o necesidad", "Evitar riesgos", "No planear nada", "Esperar que otros lo hagan"], correcta: 0},
+    ];
 
-/* Login */
-function login() {
-    const pass = document.getElementById("pass").value;
-    if(pass === "jolly") {
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("panel").style.display = "block";
-        cargarCasillas();
-        if(casillas.length === 0) crearNuevaCasilla();
-    } else {
-        document.getElementById("error").textContent = "Contraseña incorrecta.";
-    }
-}
-
-/* Nueva casilla */
-function crearNuevaCasilla() {
-    const numero = casillas.length + 1;
-    casillas.push({ numero, actividades: [] });
-    renderCasillas();
-}
-
-/* Guardar actividad */
-function guardarActividad(index) {
-    const casilla = casillas[index];
-    const texto = document.getElementById(`actividad${casilla.numero}`).value.trim();
-    const fecha = document.getElementById(`fechaEntrega${casilla.numero}`).value;
-    const hora = document.getElementById(`horaEntrega${casilla.numero}`).value;
-
-    if(texto === "" || fecha === "" || hora === "") {
-        alert("Completa toda la información.");
-        return;
-    }
-
-    casilla.actividades.push({
-        texto,
-        fecha,
-        hora,
-        icono: iconos[Math.floor(Math.random()*iconos.length)]
-    });
-
-    guardarLocal();
-    renderCasillas();
-
-    document.getElementById(`actividad${casilla.numero}`).value = "";
-    document.getElementById(`fechaEntrega${casilla.numero}`).value = "";
-    document.getElementById(`horaEntrega${casilla.numero}`).value = "";
-
-    if(casilla.actividades.length === 2) crearNuevaCasilla();
-}
-
-/* Editar */
-function editarActividad(ci, ai) {
-    const nueva = prompt("Editar actividad:", casillas[ci].actividades[ai].texto);
-    if(nueva && nueva.trim() !== "") {
-        casillas[ci].actividades[ai].texto = nueva.trim();
-        guardarLocal();
-        renderCasillas();
-    }
-}
-
-/* Eliminar */
-function borrarActividad(ci, ai) {
-    if(!confirm("¿Seguro que deseas borrar esta actividad?")) return;
-    casillas[ci].actividades.splice(ai, 1);
-    guardarLocal();
-    renderCasillas();
-}
-
-/* Render */
-function renderCasillas() {
-    const cont = document.getElementById("casillasContainer");
-    cont.innerHTML = "";
-
-    casillas.forEach((casilla, i)=>{
-        const div = document.createElement("div");
-        div.className = "casilla";
-        div.innerHTML = `
-            <div class="casilla-title">Casilla ${casilla.numero}</div>
-            <textarea id="actividad${casilla.numero}" placeholder="¿Qué actividad harás?"></textarea>
-            <label>Fecha:</label>
-            <input type="date" id="fechaEntrega${casilla.numero}">
-            <label>Hora:</label>
-            <input type="time" id="horaEntrega${casilla.numero}">
-            <button onclick="guardarActividad(${i})">Guardar actividad</button>
-            <div id="lista${casilla.numero}"></div>
-        `;
-        cont.appendChild(div);
-
-        const lista = document.getElementById(`lista${casilla.numero}`);
-        casilla.actividades.forEach((act,j)=>{
-            lista.innerHTML += `
-                <div class="itemBox">
-                    <div><span class="icono">${act.icono}</span><b>${j+1}. ${act.texto}</b></div>
-                    <div>📅 ${act.fecha}</div>
-                    <div>⏰ ${act.hora}</div>
-                    <div style="margin-top:7px;">
-                        <span class="control-btn" onclick="editarActividad(${i},${j})">Editar</span>
-                        <span class="control-btn delete-btn" onclick="borrarActividad(${i},${j})">Eliminar</span>
-                    </div>
-                </div>
-            `;
+    const form = document.getElementById('quiz');
+    preguntas.forEach((p, i) => {
+        const div = document.createElement('div');
+        div.className = 'pregunta';
+        div.innerHTML = `<h2>${i + 1}. ${p.texto}</h2>`;
+        p.opciones.forEach((opt, j) => {
+            const id = `p${i}o${j}`;
+            div.innerHTML += `
+                <label for="${id}"><input type="radio" name="q${i}" id="${id}" value="${j}"> ${opt}</label>`;
         });
+        form.appendChild(div);
     });
-}
 
-/* LocalStorage */
-function guardarLocal() {
-    localStorage.setItem("casillasJolly", JSON.stringify(casillas));
-}
-
-function cargarCasillas() {
-    const guardadas = localStorage.getItem("casillasJolly");
-    if(guardadas) casillas = JSON.parse(guardadas);
-    renderCasillas();
-}
-
-/* Exportar Word */
-function exportarWord() {
-    let contenido = "";
-    casillas.forEach(c=>{
-        contenido += `<b>Casilla ${c.numero}</b><br>`;
-        c.actividades.forEach((a,i)=>{
-            contenido += `${i+1}. ${a.texto}<br>➤ Fecha: ${a.fecha}<br>➤ Hora: ${a.hora}<br><br>`;
+    document.getElementById('calcular').addEventListener('click', () => {
+        let aciertos = 0;
+        preguntas.forEach((p, i) => {
+            const seleccion = form[`q${i}`].value;
+            if (seleccion !== undefined && +seleccion === p.correcta) aciertos++;
         });
+        // escala a 5 puntos
+        const nota = ((aciertos / preguntas.length) * 5).toFixed(2);
+        const pasa = nota >= 3.5;
+        document.getElementById('resultado').textContent = `Aciertos: ${aciertos} de ${preguntas.length}. Nota: ${nota} / 5. ${pasa ? '¡Aprobado!' : 'Reprobado.'}`;
     });
 
-    const estilo = "<style>body{ font-family:Montserrat,sans-serif; color:#663a75; }</style>";
-    const blob = new Blob(["<html><head><meta charset='UTF-8'>" + estilo + "</head><body>" + contenido + "</body></html>"], {type:"application/msword"});
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "Consolidado_Jolly.doc";
-    link.click();
-    URL.revokeObjectURL(url);
-}
+    // splash hide after 5 segundos
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            const splash = document.getElementById('splash');
+            splash.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }, 5000);
+    });
 </script>
-
 </body>
 </html>
