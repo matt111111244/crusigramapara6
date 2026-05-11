@@ -2,158 +2,170 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cuestionario</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Emprendimiento | Innovación y Futuro</title>
     <style>
-        /* Estilo "hacker" sobrio mejorado */
+        :root {
+            --primary: #2d3436;
+            --accent: #0984e3;
+            --light: #dfe6e9;
+            --white: #ffffff;
+        }
+
         body {
-            background-color: #0e0e0e;
-            color: #c0c0c0;
-            font-family: "Courier New", monospace;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
-            overflow: hidden; /* queremos controlar splash */
+            line-height: 1.6;
+            color: var(--primary);
+            background-color: #f9f9f9;
         }
 
-        /* splash/login gif */
-        #splash {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
+        /* Hero Section */
+        header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1351&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            transition: opacity 1s ease;
-        }
-        #splash.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-        #splash img {
-            max-width: 300px;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%,100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
         }
 
-        .container {
-            max-width: 800px;
-            padding: 2rem;
-            background-color: #1a1a1a;
-            box-shadow: 0 0 20px #000;
-            border: 1px solid #333;
-            margin: auto;
-            position: relative;
-            top: 50px;
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-        h1, h2 {
-            color: #8aff8a;
-            text-align: center;
-            text-shadow: 0 0 5px #8aff8a;
+
+        header p {
+            font-size: 1.5rem;
+            font-style: italic;
+            margin-bottom: 30px;
         }
-        .pregunta {
-            margin-bottom: 1.5rem;
+
+        .cta-button {
+            background-color: var(--accent);
+            color: var(--white);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: 0.3s;
         }
-        label {
-            display: block;
-            margin: .25rem 0;
-            cursor: pointer;
-        }
-        input[type="radio"] {
-            margin-right: .5rem;
-        }
-        button {
-            display: block;
-            margin: 2rem auto 0;
-            padding: .75rem 2rem;
-            background: transparent;
-            border: 1px solid #8aff8a;
-            color: #8aff8a;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background .2s, transform .2s;
-        }
-        button:hover {
-            background: rgba(138, 255, 138, .1);
+
+        .cta-button:hover {
+            background-color: #074a80;
             transform: scale(1.05);
         }
-        #resultado {
-            margin-top: 1.5rem;
+
+        /* Secciones Principales */
+        .container {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--accent);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h3 {
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body>
-<div id="splash">
-    <!-- reemplaza el src con la ruta de tu gif de login -->
-    <img src="assets/login.gif" alt="Cargando ..." />
-</div>
-<div class="container">
-    <h1>Cuestionario</h1>
-    <form id="quiz">
-        <!-- Se generan las preguntas con JavaScript -->
-    </form>
-    <button id="calcular">Calcular nota</button>
-    <div id="resultado"></div>
-</div>
-<script>
-    const preguntas = [
-        {texto: "¿Qué significa emprender?", opciones: ["Copiar ideas de otros", "Iniciar un proyecto propio", "Evitar riesgos", "Trabajar solo"], correcta: 1},
-        {texto: "¿Cuál de estas cualidades es importante en un emprendedor?", opciones: ["Creatividad", "Pereza", "Desinterés", "Conformismo"], correcta: 0},
-        {texto: "¿Qué es el trabajo en equipo?", opciones: ["Hacer tareas sin ayuda", "Colaborar con otros para lograr un objetivo común", "Competir entre compañeros", "Ignorar las ideas de los demás"], correcta: 1},
-        {texto: "¿Cuál es una ventaja de trabajar en equipo?", opciones: ["Más ideas y soluciones", "Menos comunicación", "Más conflictos", "Menos responsabilidad"], correcta: 0},
-        {texto: "¿Qué significa “liderazgo” en un equipo?", opciones: ["Dar órdenes sin escuchar", "Guiar y motivar al grupo", "Trabajar solo", "Evitar responsabilidades"], correcta: 1},
-        {texto: "¿Qué valor es esencial para el trabajo en equipo?", opciones: ["Respeto", "Egoísmo", "Desconfianza", "Desinterés"], correcta: 0},
-        {texto: "¿Cuál de estas frases describe mejor la innovación?", opciones: ["Repetir lo mismo siempre", "Crear nuevas ideas o mejorar las existentes", "Evitar cambios", "Copiar sin modificar"], correcta: 1},
-        {texto: "¿Qué es un plan de negocios?", opciones: ["Un documento que organiza ideas y estrategias de un proyecto", "Una lista de compras", "Un horario escolar", "Un contrato de trabajo"], correcta: 0},
-        {texto: "¿Qué actitud ayuda más en un equipo?", opciones: ["Escuchar y aportar ideas", "Criticar sin proponer soluciones", "Ignorar las opiniones", "Trabajar sin comunicar"], correcta: 0},
-        {texto: "¿Qué significa “empatía” en el trabajo en equipo?", opciones: ["Ponerse en el lugar del otro", "Ignorar sentimientos", "Competir siempre", "Pensar solo en uno mismo"], correcta: 0},
-        {texto: "¿Cuál es un ejemplo de emprendimiento escolar?", opciones: ["Crear una feria de ciencias con proyectos propios", "Copiar tareas de otros", "Evitar participar en actividades", "No compartir ideas"], correcta: 0},
-        {texto: "¿Qué recurso es más importante para un emprendedor?", opciones: ["La creatividad y la perseverancia", "La pereza", "La desorganización", "La falta de comunicación"], correcta: 0},
-        {texto: "¿Qué significa “colaboración”?", opciones: ["Trabajar juntos para lograr un objetivo", "Evitar responsabilidades", "Criticar sin ayudar", "Trabajar en silencio"], correcta: 0},
-        {texto: "¿Qué puede causar problemas en un equipo?", opciones: ["Falta de comunicación", "Respeto mutuo", "Escuchar ideas", "Organización"], correcta: 0},
-        {texto: "¿Cuál es el primer paso para emprender un proyecto?", opciones: ["Identificar una idea o necesidad", "Evitar riesgos", "No planear nada", "Esperar que otros lo hagan"], correcta: 0},
-    ];
 
-    const form = document.getElementById('quiz');
-    preguntas.forEach((p, i) => {
-        const div = document.createElement('div');
-        div.className = 'pregunta';
-        div.innerHTML = `<h2>${i + 1}. ${p.texto}</h2>`;
-        p.opciones.forEach((opt, j) => {
-            const id = `p${i}o${j}`;
-            div.innerHTML += `
-                <label for="${id}"><input type="radio" name="q${i}" id="${id}" value="${j}"> ${opt}</label>`;
-        });
-        form.appendChild(div);
-    });
+    <header>
+        <h1>Tu Proyecto Extraordinario</h1>
+        <p>"Transformando ideas en realidades que inspiran"</p>
+        <a href="#contacto" class="cta-button">Conócenos más</a>
+    </header>
 
-    document.getElementById('calcular').addEventListener('click', () => {
-        let aciertos = 0;
-        preguntas.forEach((p, i) => {
-            const seleccion = form[`q${i}`].value;
-            if (seleccion !== undefined && +seleccion === p.correcta) aciertos++;
-        });
-        // escala a 5 puntos
-        const nota = ((aciertos / preguntas.length) * 5).toFixed(2);
-        const pasa = nota >= 3.5;
-        document.getElementById('resultado').textContent = `Aciertos: ${aciertos} de ${preguntas.length}. Nota: ${nota} / 5. ${pasa ? '¡Aprobado!' : 'Reprobado.'}`;
-    });
+    <section class="container">
+        <h2 class="section-title">Nuestros Pilares</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Misión</h3>
+                <p>Brindar soluciones innovadoras que mejoren la calidad de vida de nuestros clientes, manteniendo siempre la excelencia en el servicio.</p>
+            </div>
+            <div class="card">
+                <h3>Innovación</h3>
+                <p>Utilizamos las últimas tendencias y tecnologías para asegurar que cada detalle de nuestro proyecto esté a la vanguardia.</p>
+            </div>
+            <div class="card">
+                <h3>Impacto Social</h3>
+                <p>No solo creamos un negocio, construimos comunidad y generamos un cambio positivo en nuestro entorno local.</p>
+            </div>
+        </div>
+    </section>
 
-    // splash hide after 5 segundos
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            const splash = document.getElementById('splash');
-            splash.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }, 5000);
-    });
-</script>
+    <section class="container" style="background: var(--light); padding: 50px 20px; border-radius: 20px;">
+        <h2 class="section-title">¿Por qué elegirnos?</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>Calidad Garantizada</h3>
+                <p>Cada proceso es supervisado para cumplir con los más altos estándares del mercado.</p>
+            </div>
+            <div class="card">
+                <h3>Atención Personalizada</h3>
+                <p>Entendemos que cada cliente es único, por eso ofrecemos soluciones a medida.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contacto">
+        <p>&copy; 2026 Tu Emprendimiento. Todos los derechos reservados.</p>
+        <p>Pereira, Risaralda, Colombia</p>
+    </footer>
+
 </body>
 </html>
